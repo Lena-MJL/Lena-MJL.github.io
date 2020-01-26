@@ -979,16 +979,16 @@ footer .social-links li:first-child { margin-left: 0; }
 /* Go To Top Button */
 #go-top {
 	position: absolute;
-	top: -24px;
+	top: 20px;
    left: 50%;
-   margin-left: -30px;
+   margin-left: 0px;
 }
 #go-top a {
 	text-decoration: none;
 	border: 0 none;
 	display: block;
-	width: 60px;
-	height: 60px;
+	width: 45px;
+	height: 45px;
 	background-color: #f19cdc;
 
 	-webkit-transition: all 0.2s ease-in-out;
@@ -999,7 +999,7 @@ footer .social-links li:first-child { margin-left: 0; }
 
    color: #f19cdc ;
    font-size: 21px;
-   line-height: 60px;
+   line-height: 45px;
  	border-radius: 100%;
 }
 #go-top a:hover { background-color:  rgb(186, 60, 190); }
