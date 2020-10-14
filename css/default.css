@@ -732,7 +732,7 @@ properly.
 	   margin-right: 0;
       padding: 0 30px;
    }
-   .row .row { width: auto; max-width: none; margin: 0 -30px; }
+   .row .row { width: auto; max-width: none; margin: auto; }
 
    [class*="column"] + [class*="column"]:last-child { float: none; }
    [class*="bgrid"] [class*="column"] + [class*="column"]:last-child { float: none; }
