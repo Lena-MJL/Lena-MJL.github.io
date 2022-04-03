@@ -1,381 +1,269 @@
 <!DOCTYPE html>
-<!--[if lt IE 8 ]><html class="no-js ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="no-js ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 8)|!(IE)]><!-->
-<html class="no-js" lang="en">
-<!--<![endif]-->
+<html>
 
 <head>
+    <meta charset="utf-8" />
+    <title>Lena Latifa's site</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-   <!--- Basic Page Needs
-   ================================================== -->
-   <meta charset="utf-8">
-   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-   <title>Lena Latifa</title>
-   <meta name="description" content="">
-   <meta name="author" content="">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="css/font-awesome.min.css" />
 
-   <base target="_blank">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <!--<link href="css/bootstrap.min.css" rel="stylesheet">-->
 
-   <!-- Mobile Specific Metas
-   ================================================== -->
-   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+         <script src="js/html5shiv.js"></script>
+         <script src="js/respond.min.js"></script>
+         <![endif]-->
 
-   <!-- CSS
-    ================================================== -->
-   <link rel="stylesheet" href="css/default.css">
-   <link rel="stylesheet" href="css/layout.css">
-   <link rel="stylesheet" href="css/media-queries.css">
-   <link rel="stylesheet" href="css/magnific-popup.css">
 
-   <!-- Script
-   ================================================== -->
-   <script src="js/modernizr.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- http://getbootstrap.com/customize/ change "@screen-sm" -> "@screen-md" in @grid-float-breakpoint -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menucollapse.js"></script>
+    <script type="text/javascript" src="js/custom.js"></script>
 
-   <!-- Favicons
-	================================================== -->
-   <link rel="shortcut icon" href="favicon.png">
-
+    <!-- favicon owo -->
+    <link rel="shortcut icon" href="images/favicon.png">
 </head>
 
-<body>
-
-   <!-- Header
-   ================================================== -->
-   <header id="home">
-
-      <nav id="nav-wrap">
-         <ul id="nav" class="nav">
-            <li class="current"><a class="smoothscroll" href="#home">Home</a></li>
-            <li><a class="smoothscroll" href="#about">About</a></li>
-            <li><a class="smoothscroll" href="#resume">Resume</a></li>
-            <!-- <li><a class="smoothscroll" href="#contact">Contact</a></li> -->
-         </ul> <!-- end #nav -->
-
-      </nav> <!-- end #nav-wrap -->
-
-      <div class="row banner">
-         <div class="banner-text">
-            <h1 class="responsive-headline">I'm Lena Latifa</h1>
-            <h3>A UK based <span>Computer Scientist</span>
-               <hr />
-               <ul class="social">
-                  <li><a href="https://twitter.com/Lena_MJL"><i class="fa fa-twitter"></i></a></li>
-                  <li><a href="https://github.com/Anelacu"><i class="fa fa-github"></i></a></li>
-                  <li><a href="https://www.linkedin.com/in/magdalena-latifa/"><i class="fa fa-linkedin"></i></a></li>
-                  <li><a href="Magdalena_Latifa_CV.pdf"><i
-                           class="fa fa-file"></i></a></li>
-
-
-
-               </ul>
-         </div>
-      </div>
-
-      <p class="scrolldown">
-         <a class="smoothscroll" href="#about"><i class="icon-down-circle"></i></a>
-      </p>
-
-   </header> <!-- Header End -->
-
-
-   <!-- About Section
-   ================================================== -->
-   <section id="about">
-
-      <div class="row">
-
-         <div class="three columns">
-
-            <img class="profile-pic" src="images/profilepic.jpg" alt="" />
-
-         </div>
-
-         <div class="nine columns main-col">
-
-            <h2>About Me</h2>
-
-            <p>I am a current <a href="https://www.gla.ac.uk/">University of Glasgow</a> student studying for a BSc
-               (Hons) in Computing Science.
-               My particular fields of interest are theoretical computer science,
-               algorithmics, formal methods and pure mathematics. In the past
-               I have dabbled in competitive programming, which is still a side hobby of mine. <br>
-               I am also an active committee member of the <a href="https://gutechsoc.com/">Glasgow University Tech
-                  Society</a> and a frequent participant in tech events
-               such as hackathons!
-            </p>
-
-            <div class="row">
-
-               <div class="columns contact-details">
-
-                  <h2>Contact Details</h2>
-                  <p class="address">
-                     <span><a href="mailto:magdalena.latifa[at]gmail.com">
-                           magdalena.latifa [at] gmail.com</a></span>
-                  </p>
-
-               </div>
-
-               <div class="columns download">
-                  <p>
-                     <a href="Magdalena_Latifa_CV.pdf" class="button"><i class="fa fa-file"></i>Open Resume</a>
-                  </p>
-               </div>
-
-            </div> <!-- end row -->
-
-         </div> <!-- end .main-col -->
-
-      </div>
-
-   </section> <!-- About Section End-->
-
-
-   <!-- Resume Section
-   ================================================== -->
-   <section id="resume">
-
-      <!-- Education
-      ----------------------------------------------- -->
-      <div class="row education">
-
-         <div class="three columns header-col">
-            <h1><span>Education</span></h1>
-         </div>
-
-         <div class="nine columns main-col">
-
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>University of Glasgow</h3>
-                  <p class="info">BSc (Hons) Computer Science <span>&bull;</span> <em class="date">Sep 2018 - Jun
-                        2022</em></p>
-
-                  <p>
-                     My University courses so far: <br>
-                     <b>Year 3:</b>
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI4072"> Theory of Computation</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI4009"> Algorithmics</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI4016"> Programming Languages</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI5105"> Human Centred Security</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI4013"> Database Systems</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI4014"> Interactive Systems</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI4073"> Data Fundamentals</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI4081"> Systems Programming</a>. <br>
-
-                     <b>Year 2 (Computer Science):</b>
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI2001"> Java Programming</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI2024"> Networks and Operating
-                        Systems</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI2003"> Algorithmic
-                        Foundations</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI2008"> Object Oriented Software
-                        Engineering</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI2007"> Algorithms and Data
-                        Structures</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI2021"> Web Development</a>. <br>
-
-                     <b>Year 2 (Mathematics):</b>
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=MATHS2001"> Multivariable Calculus
-                     </a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=MATHS2004"> Linear Algebra</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=MATHS2027"> Graph Theory</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=MATHS2008"> Pure Mathematics</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=MATHS2025"> Discrete Mathematics</a>.
-                     <br>
-
-                     <b>Year 2 (Physics):</b>
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=PHYS2003"> Programming in C under
-                        Linux</a>.<br>
-                     <b>Year 1:</b>
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI1001"> Python programming</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI1006"> Computer Science
-                        Fundamentals(SQL, Database Design, HCI)</a>,
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=COMPSCI1018"> Computer Systems
-                        (asm)</a>,
-                     Mathematics (1X/Y - advanced course),
-                     <a href="https://www.gla.ac.uk/coursecatalogue/course/?code=GERMAN1003"> German language</a>.
-                  </p>
-
-               </div>
-
-            </div> <!-- item end -->
-
-
-         </div> <!-- main-col end -->
-
-      </div> <!-- End Education -->
-
-
-      <!-- Work
-      ----------------------------------------------- -->
-
-      <div class="row work">
-
-         <div class="three columns header-col">
-            <h1><span>Work Experience</span></h1>
-         </div>
-
-         <div class="nine columns main-col">
-
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>Amazon</h3>
-                  <p class="info"> Software Development Engineer Intern<span>&bull;</span> <em class="date">Summer 2021</em></p>
-
-                  <p>
-                    Joined the Prime Video Windows App team and worked mostly with React, UWP and Windows Runtime.
-                  </p>
-                  
-                  <h3>Amazon Web Services</h3>
-                  <p class="info"> Software Development Engineer Intern<span>&bull;</span> <em class="date">Jun 2020 - Sep 2020</em></p>
-
-                  <p>
-                     Joined the AWS Billing team and worked with various AWS services such as AWS CDK or Amazon SNS and Amazon SQS.
-                  </p>
-
-               </div>
-
-         </div> <!-- main-col end -->
-
-      </div> <!-- End Work -->
-
-      <!-- Experience
-      ----------------------------------------------- -->
-      <div class="row experience"  style="display: none;">
-
-         <div class="three columns header-col">
-            <h1><span>Other Experience</span></h1>
-         </div>
-
-         <div class="nine columns main-col">
-
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>Projects</h3>
-                  <p class="info">Software Developer <span>&bull;</span> <em class="date">2019-Present</em></p>
-
-                  <a href="https://github.com/Anelacu/PySnakeAI">PySnake AI</a><br>
-                  <p>
-                     My friend and I developed a version of the popular <a
-                        href="https://en.wikipedia.org/wiki/Snake_(video_game_genre)">"Snake" </a>
-                     game using Python OOP. Our end goal was to develop an artificial intelligence agent that would
-                     control the snake using a Deep-Q algorithm.
-                     This project was great in helping me understand some of the more complicated mathematics involved
-                     in designing and optimising neural networks.
-                  </p>
-
-                  <a href="https://github.com/Anelacu/TCP-file-transfer">TCP file transfer in Python</a><br>
-                  <p>
-                     As a part of my university Networks and Operating Systems course assessment,
-                     I have collaborated with my colleague on implementing a TCP file transfer server using
-                     <a href="https://en.wikipedia.org/wiki/Berkeley_sockets"> berkeley sockets </a> API in Python.
-                  </p>
-
-                  <a href="https://github.com/Anelacu/tango_with_django_project">Tango with Django project</a><br>
-                  <p>
-                     As a part of my university Web App Development course assessment,
-                     I have followed a tutorial from first 10 chapters of the <a
-                        href="https://www.tangowithdjango.com/">Tango with Django</a> book in order to
-                     make my own web app application called Rango using Python 3 and Django 2.2.3.
-                  </p>
-
-               </div>
-
-            </div> <!-- item end -->
-
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>Hackathons</h3>
-                  <p class="info">Software Developer <span>&bull;</span> <em class="date">2019</em></p>
-
-                  <p>
-                     During my second year of studies I had the amazing opportunity to participate in two hackathons -
-                     <a href="https://gutechsoc.com/hackathon">Do you have the GUTS?" </a>Glasgow University Hackathon
-                     and <a
-                        href="https://www.jpmorganchase.com/corporate/news/stories/five-things-you-need-to-know-about-code-for-good.htm">JP
-                        Morgan's "Code for Good". </a>
-                     During these events I had great fun working with a team towards to a common goal, but also
-                     exploring new technologies like AWS and Web App Development.
-                     I also learnt important techniques to make sure the applications I develop are accessible to
-                     everyone while developing a Web App
-                     for a science centre to tackle accessability issues for people with hardness of sight.
-                  </p>
-
-               </div>
-
-            </div> <!-- item end -->
-
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>Society activities</h3>
-                  <p class="info">Glasgow University Tech Society's Committee Member<span>&bull;</span> <em
-                        class="date"> Sep 2019-Present</em></p>
-
-                  <p>
-                     I have joined <a href="https://gutechsoc.com"> Glasgow University Tech Society</a>'s Committee to
-                     help with organising and
-                     running events for university's computer science community.
-                     I have been able to help with the organisation and judging during Hacker Olympics 2019 and I was a
-                     tutor during Machine Learning workshops.
-                  </p>
-
-               </div>
-
-            </div> <!-- item end -->
-
-
-         </div> <!-- main-col end -->
-
-      </div> <!-- End Experience -->
-
-      <!-- footer
-   ================================================== -->
-      <footer  style="display: none;">
-
-         <div class="row">
-
-            <!-- <div class="twelve columns">
-
-          <ul class="social-links">
-               <li><a href="https://www.linkedin.com/in/magdalena-latifa/"><i class="fa fa-linkedin"></i></a></li>
-               <li><a href="https://github.com/Anelacu"><i class="fa fa-github"></i></a></li>
-               <li><a href="Magdalena_Latifa_CV.pdf" download="Magdalena_Latifa_CV.pdf"><i class="fa fa-file"></i></a></li>
-            </ul>
-
-           
-
-         </div>-->
-
-            <div id="go-top"><a class="smoothscroll" title="Back to Top" href="#home"><i class="icon-up-open"></i></a>
+<body id="page-top" class="index">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button id="button2" type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
             </div>
 
-         </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="page-scroll">
+                        <a onclick="javascript:reset_menus();$('#tab-education-content').show();"
+                            href="#education">Education</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a onclick="javascript:reset_menus();$('#tab-research-content').show();"
+                            href="#research">Research</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a onclick="javascript:reset_menus();$('#tab-se-content').show();"
+                            href="#se">Software Engineering</a>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
 
-      </footer> <!-- Footer End-->
+    <!-- Home Section -->
+    <section name="home" id="home" style="margin-top:40px">
+        <div class="container">
+            <div align="left" class="col-md-3" style="margin-top:40px">
+                <a target="_blank" href="images/200x200.jpg">
+                    <img id="mobile-img" src="images/200x200.jpg" width="200" border="0" height="200" alt=""></a>
+            </div>
+            <div align="left" class="col-md-7">
+                <h2 style="margin-top:40px; margin-bottom:20px">Lena Latifa
+                </h2>
 
-      <!-- Java Script
-   ================================================== -->
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-      <script>window.jQuery || document.write('<script src="js/jquery-1.10.2.min.js"><\/script>')</script>
-      <script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
+                <h4>Computing Science student at <a href="">University of Glasgow</a><br><br>
+                    Email: magdalena.latifa [at] gmail.com <br><br>
+                    <a href="Magdalena_Latifa_CV.pdf">CV</a><br>
+                    <a href="https://github.com/Anelacu/">Github @Anelacu</a><br>
+                    <a href="https://twitter.com/Lena_MJL">Twitter @Lena_MJL</a><br>
+                </h4>
+            </div>
 
-      <script src="js/jquery.flexslider.js"></script>
-      <script src="js/waypoints.js"></script>
-      <script src="js/jquery.fittext.js"></script>
-      <script src="js/magnific-popup.js"></script>
-      <script src="js/init.js"></script>
+            <!--<p><a href="#" class="btn btn-primary">More &raquo;</a></p>-->
+            <b class="expandshow" style="display:none;" id="tab-1">
+                <button class="btn btn-primary btn-lg btn-block" style="width: 100%;"
+                    onclick="javascript:$('.allshow').show();$('.noshow').hide();$('.collapseshow').show();$('.expandshow').hide();">EXPAND
+                    ALL SECTIONS <span class="glyphicon glyphicon-chevron-down"></span></button>
+            </b>
+            <b class="collapseshow" style="display:none;" id="tab-1">
+                <button class="btn btn-primary btn-lg btn-block" style="display: block; width: 100%;"
+                    onclick="javascript:$('.allshow').hide();$('.noshow').show();$('.expandshow').show();$('.collapseshow').hide();">COLLAPSE
+                    ALL SECTIONS <span class="glyphicon glyphicon-chevron-up"></span></button>
+            </b>
+
+        </div>
+    </section>
+
+    <!-- Home Section -->
+    <section name="intro" id="intro">
+        <div class="container lead">
+            <div style="text-align: left; margin-top:10px" class="col-md-12">
+                <!--<h2>Welcome!</h2>-->
+
+                <b class="noshow" style="display:none;" id="tab-1">
+                    <button class="btn btn-default btn-lg btn-block" style="display: block; width: 100%;"
+                        onclick="javascript:$('#tab-intro-content').toggle();">Introduction <span
+                            class="glyphicon glyphicon-chevron-down"></span></button>
+                </b>
+
+                <div class="allshow" style="display:none;" id="tab-intro-content">
+                    <hr class="star-primary">
+
+                    <p class="lead">
+                        I am a current <a href="https://www.gla.ac.uk/">University of Glasgow</a> student studying for a
+                        BSc (Hons) in Computing Science.
+                        My particular fields of interest are theoretical computer science,
+                        algorithmics, formal methods and pure mathematics.
+
+                        <br><br>
+
+                        Since September 2021, I have been a member of <a
+                            href="http://www.dcs.gla.ac.uk/~ornela/colab.html">CoLab</a> and I will be continuing as a
+                        PhD student in Autumn 2022.
+                        My PhD will be in the area of programming languages under the supervision of Dr Ornela Dardha
+                        and Dr Simon Fowler.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Edu Section -->
+    <section name="education" id="education">
+        <div class="container lead">
+            <div style="text-align: left; margin-top:10px" class="col-md-12">
+
+                <b class="noshow" style="display:none;" id="tab-3">
+                    <button class="btn btn-default btn-lg btn-block" style="display: block; width: 100%;"
+                        onclick="javascript:$('#tab-publications-content').toggle();">Education <span
+                            class="glyphicon glyphicon-chevron-down"></span></button>
+                </b>
+                <div class="allshow" style="display:none;" id="tab-education-content">
+                    <hr class="star-primary">
+
+                    <h2>Education </h2>
+
+                    <h4>
+                        <b>University of Glasgow</b> <br>
+                        Computing Science (BSc Hons)
+                        <h5>
+                            <i>Sep 2018 - Jun 2022</i><br>
+                            Specialism in Theoretical Computer Science<br>
+                            Expected 1st class classification<br>
+                        </h5>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Research Section -->
+    <section name="research" id="research">
+        <div class="container lead">
+            <div style="text-align: left; margin-top:10px" class="col-md-12">
+                <div class="allshow" style="display:none;" id="tab-research-content">
+                    <hr class="star-primary">
+
+                    <h2>Research </h2>
+
+                    <ul>
+                        <li style="margin-bottom: 70px;">
+                            <div>
+                                <h4>
+                                    <div align="left" class="col-md-10">
+                                        <b>
+                                            Capable GV: Capabilities for Session Types in GV
+                                        </b>
+                                        <br>
+                                        <i>Magdalena J. Latifa, Ornela Dardha</i> <br>
+                                        Extended Abstract at the 13th Workshop on Programming Language Approaches to
+                                        Concurrency- & Communication-cEntric Software 2022 (PLACES'22)
+                                    </div>
+                                    <div align="right" class="col-md-2">
+                                        <a href="files/CapableGV_PLACES22.pdf">PDF</a>
+                                    </div>
+                                </h4>
+                            </div>
+                        </li>
+                        <li style=""">
+                            <h4>
+                                <div align=" left" class="col-md-10">
+                            <b>
+                                Capable GV: Capabilities for Session Types in GV
+                            </b>
+                            <br>
+                            <i>Magdalena J. Latifa</i> <br>
+                            University of Glasgow Undergraduate Dissertation submitted as a part of level 4
+                            studies
+                </div>
+                <div align="right" class="col-md-2">
+                    <a href="files/L4.pdf">PDF</a>
+                </div>
+                </h4>
+                </li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Work Section -->
+    <section name="se" id="se">
+        <div class="container lead">
+            <div style="text-align: left; margin-top:10px" class="col-md-12">
+                <div class="allshow" style="display:none;" id="tab-se-content">
+                    <hr class="star-primary">
+                    <h2>Software Engineering </h2>
+
+                    <h4>
+                        <b>Amazon</b> <br>
+                        Software Development Engineer Intern
+                        <h5>
+                            <i>Jun 2021 - Aug 2021</i><br>
+                            Joined the Prime Video Windows App team and worked mostly with React, UWP and Windows
+                            Runtime.<br>
+                        </h5>
+                    </h4>
+
+                    <h4 style="margin-top: 40px;">
+                        <b>Amazon Web Services</b> <br>
+                        Software Development Engineer Intern
+                        <h5>
+                            <i>Jun 2020 - Sep 2020</i><br>
+                            Joined the AWS Billing team and worked with various AWS services such as AWS CDK or Amazon
+                            SNS and Amazon SQS.<br>
+                        </h5>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="star-primary">
+    <footer>
+        <small>
+            <center>
+                © 2022 | M. Latifa. Credits: AR template
+                <a onclick="javascript:$('#credit').toggle();"><img border="0" src="images/ccby.png" /></a>
+                <div style="display:none;" id="credit">[AR template available under Creative Commons CC BY 4.0 licence:
+                    <a href="https://github.com/dmsl/academic-responsive-template" target="_blank">
+                        https://github.com/dmsl/academic-responsive-template
+                    </a> ]
+                </div>
+            </center>
+        </small>
+    </footer>
 
 </body>
 
