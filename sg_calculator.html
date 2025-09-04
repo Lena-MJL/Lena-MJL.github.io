@@ -6,74 +6,140 @@
     <title>SG Calculator</title>
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .sg-table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        .sg-table {
+            min-width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+        }
+        
+        .sg-table th, .sg-table td {
+            padding: 8px 12px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 130px;
+        }
+        
+        .sg-table th {
+            background-color: #f8f9fa;
+            position: sticky;
+            top: 0;
+        }
+        
+        .sg-table th:first-child, .sg-table td:first-child {
+            position: sticky;
+            left: 0;
+            background-color: #fff;
+            z-index: 1;
+            text-align: left;
+            width: 150px;
+        }
+        
+        .sg-table th:first-child {
+            z-index: 2;
+        }
+        
+        .material-input {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
         <h2>SG Calculator</h2>
-        <div id="inputs-container">
-            <!-- Rows will be rendered here -->
+        <div class="sg-table-container">
+            <table class="sg-table" id="sg-table">
+                <thead>
+                    <tr id="header-row">
+                        <th>Material (g)</th>
+                        <!-- Material headers will be rendered here -->
+                    </tr>
+                </thead>
+                <tbody id="calculator-grid">
+                    <!-- Rows will be rendered here -->
+                </tbody>
+            </table>
         </div>
     </div>
     <script>
         // Define the materials list
-        const materials = ["Wax", "925 silver", "9ct gold", "platinum", "950 palladium"];
+        const materials = ["Wax", "925 silver", 
+        "9ct gold", "14ct gold", "18ct gold", "22ct gold", "24ct gold", 
+        "platinum", "950 palladium"];
+        const relative_sg_wax = {
+            "Wax": 1.0,
+            "925 silver": 10.30,
+            "9ct gold": 11.2,
+            "14ct gold": 14.1,
+            "18ct gold": 15.7,
+            "22ct gold": 17.8,
+            "24ct gold": 19.5,
+            "platinum": 20.6,
+            "950 palladium": 12.0
+        };
         
-        const inputsContainer = document.getElementById('inputs-container');
+        // Get the header row and calculator grid elements
+        const headerRow = document.getElementById('header-row');
+        const calculatorGrid = document.getElementById('calculator-grid');
         
-        // Create one row for each material
+        // First, create the header cells for material names
+        for (let j = 0; j < materials.length; j++) {
+            const th = document.createElement('th');
+            th.textContent = materials[j];
+            headerRow.appendChild(th);
+        }
+        
+        // Then, create rows for each material
         for (let i = 0; i < materials.length; i++) {
-            // Create row for each material
-            const row = document.createElement('div');
-            row.className = 'row mb-3 align-items-center';
+            // Create a table row
+            const tr = document.createElement('tr');
+            tr.id = `material-row-${i}`;
             
-            // Create column for material name and input
-            const inputCol = document.createElement('div');
-            inputCol.className = 'col-md-3';
+            // Create the first cell with material name and input
+            const firstCell = document.createElement('td');
             
-            // Create label and input
+            // Create label and input in a container
+            const inputContainer = document.createElement('div');
+            
             const label = document.createElement('label');
-            label.textContent = materials[i];
+            label.textContent = materials[i] + " (g)";
             label.setAttribute('for', `input${i}`);
+            
             const input = document.createElement('input');
             input.type = 'number';
-            input.className = 'form-control';
+            input.className = 'form-control material-input';
             input.id = `input${i}`;
-            input.placeholder = `Enter value for ${materials[i]}`;
+            input.placeholder = `Enter value`;
             input.step = '0.01';
             
-            // Add label and input to input column
-            inputCol.appendChild(label);
-            inputCol.appendChild(input);
+            // Add label and input to container
+            inputContainer.appendChild(label);
+            inputContainer.appendChild(input);
             
-            // Add input column to row
-            row.appendChild(inputCol);
+            // Add input container to first cell
+            firstCell.appendChild(inputContainer);
             
-            // Create column for result items
-            const resultItemsCol = document.createElement('div');
-            resultItemsCol.className = 'col-md-9';
+            // Add first cell to row
+            tr.appendChild(firstCell);
             
-            // Create container for result items
-            const resultItemsContainer = document.createElement('div');
-            resultItemsContainer.className = 'row';
-            resultItemsContainer.id = `results${i}`;
-            
-            // Create result items for this material
+            // Create cells for each material result
             for (let j = 0; j < materials.length; j++) {
-                const resultItemDiv = document.createElement('div');
-                resultItemDiv.className = 'col-md-4 mb-2';
-                resultItemDiv.textContent = materials[j];
-                resultItemDiv.id = `result-${i}-${j}`;
-                resultItemsContainer.appendChild(resultItemDiv);
+                const td = document.createElement('td');
+                td.textContent = materials[j];
+                td.id = `result-${i}-${j}`;
+                tr.appendChild(td);
             }
             
-            // Add result items container to result items column
-            resultItemsCol.appendChild(resultItemsContainer);
-            
-            // Add result items column to row
-            row.appendChild(resultItemsCol);
-            
-            // Add row to inputs container
-            inputsContainer.appendChild(row);
+            // Add row to calculator grid
+            calculatorGrid.appendChild(tr);
             
             // Add event listener to input to update results
             input.addEventListener('input', function() {
@@ -92,11 +158,19 @@
             }
             
             const inputValue = parseFloat(value);
+            const sourceMaterial = materials[materialIndex];
+            const sourceRatio = relative_sg_wax[sourceMaterial];
             
-            // Update each result item with the material name and calculated value
+            // Update each result item with the calculated value
             for (let j = 0; j < materials.length; j++) {
+                const targetMaterial = materials[j];
+                const targetRatio = relative_sg_wax[targetMaterial];
+                
+                // Calculate the equivalent weight based on relative specific gravity
+                const equivalentWeight = (inputValue * targetRatio / sourceRatio).toFixed(2);
+                
                 const resultElement = document.getElementById(`result-${materialIndex}-${j}`);
-                resultElement.textContent = `${materials[j]}: ${inputValue.toFixed(2)}`;
+                resultElement.textContent = `${equivalentWeight}g`;
             }
         }
     </script>
