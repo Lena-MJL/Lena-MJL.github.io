@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SG Calculator</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>SG Calculator</h2>
+        <div id="inputs-container">
+            <!-- Rows will be rendered here -->
+        </div>
+    </div>
+    <script>
+        // Define the materials list
+        const materials = ["Wax", "925 silver", "9ct gold", "platinum", "950 palladium"];
+        
+        const inputsContainer = document.getElementById('inputs-container');
+        
+        // Create one row for each material
+        for (let i = 0; i < materials.length; i++) {
+            // Create row for each material
+            const row = document.createElement('div');
+            row.className = 'row mb-3 align-items-center';
+            
+            // Create column for material name and input
+            const inputCol = document.createElement('div');
+            inputCol.className = 'col-md-3';
+            
+            // Create label and input
+            const label = document.createElement('label');
+            label.textContent = materials[i];
+            label.setAttribute('for', `input${i}`);
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.className = 'form-control';
+            input.id = `input${i}`;
+            input.placeholder = `Enter value for ${materials[i]}`;
+            input.step = '0.01';
+            
+            // Add label and input to input column
+            inputCol.appendChild(label);
+            inputCol.appendChild(input);
+            
+            // Add input column to row
+            row.appendChild(inputCol);
+            
+            // Create column for result items
+            const resultItemsCol = document.createElement('div');
+            resultItemsCol.className = 'col-md-9';
+            
+            // Create container for result items
+            const resultItemsContainer = document.createElement('div');
+            resultItemsContainer.className = 'row';
+            resultItemsContainer.id = `results${i}`;
+            
+            // Create result items for this material
+            for (let j = 0; j < materials.length; j++) {
+                const resultItemDiv = document.createElement('div');
+                resultItemDiv.className = 'col-md-4 mb-2';
+                resultItemDiv.textContent = materials[j];
+                resultItemDiv.id = `result-${i}-${j}`;
+                resultItemsContainer.appendChild(resultItemDiv);
+            }
+            
+            // Add result items container to result items column
+            resultItemsCol.appendChild(resultItemsContainer);
+            
+            // Add result items column to row
+            row.appendChild(resultItemsCol);
+            
+            // Add row to inputs container
+            inputsContainer.appendChild(row);
+            
+            // Add event listener to input to update results
+            input.addEventListener('input', function() {
+                updateResults(i, this.value);
+            });
+        }
+        
+        // Function to update results based on input value
+        function updateResults(materialIndex, value) {
+            if (!value) {
+                // Clear results if no value
+                for (let j = 0; j < materials.length; j++) {
+                    document.getElementById(`result-${materialIndex}-${j}`).textContent = materials[j];
+                }
+                return;
+            }
+            
+            const inputValue = parseFloat(value);
+            
+            // Update each result item with the material name and calculated value
+            for (let j = 0; j < materials.length; j++) {
+                const resultElement = document.getElementById(`result-${materialIndex}-${j}`);
+                resultElement.textContent = `${materials[j]}: ${inputValue.toFixed(2)}`;
+            }
+        }
+    </script>
+</body>
+</html>
