@@ -53,8 +53,6 @@
             text-align: center;
             border: 1px solid #dee2e6;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
             min-width: 130px;
             width: 130px;
         }
@@ -72,8 +70,8 @@
             background-color: #fff;
             z-index: 1;
             text-align: left;
-            width: 260px;
-            /* 2x the standard column width */
+            width: 195px;
+            /* 1.5x the standard column width */
         }
 
         .sg-table th:first-child {
@@ -109,21 +107,23 @@
     </div>
     <script>
         // Define the materials list
-        const materials = ["Wax", "925 silver",
+        const materials = ["Wax", "925 silver", "fine silver",
             "palladium",
-            "9ct gold", "14ct gold", "18ct gold", "22ct gold", "24ct gold",
-            "platinum",
+            "9K gold", "14K gold", "18K gold", "22K gold", "24K gold",
+            "platinum", "titanium"
         ];
         const relative_sg_wax = {
             "Wax": 1.0,
             "925 silver": 10.30,
-            "9ct gold": 11.2,
-            "14ct gold": 14.1,
-            "18ct gold": 15.7,
-            "22ct gold": 17.8,
-            "24ct gold": 19.5,
+            "fine silver": 10.53,
+            "9K gold": 11.2,
+            "14K gold": 14.1,
+            "18K gold": 15.7,
+            "22K gold": 17.8,
+            "24K gold": 19.5,
             "platinum": 20.6,
-            "palladium": 12.0
+            "palladium": 12.02,
+            "titanium": 4.51
         };
 
         // Get the header row and calculator grid elements
