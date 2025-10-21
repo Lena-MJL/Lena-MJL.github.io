@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SG Calculator</title>
+    <title>Volume to metal weight Calculator</title>
 
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -33,21 +33,21 @@
             margin: 10px 0 10px 0;
         }
 
-        .sg-table-container {
+        .vw-table-container {
             width: 100%;
             margin: 0;
             padding: 0;
         }
 
-        .sg-table {
+        .vw-table {
             width: 100%;
             table-layout: fixed;
             border-collapse: collapse;
             margin: 0;
         }
 
-        .sg-table th,
-        .sg-table td {
+        .vw-table th,
+        .vw-table td {
             padding: 6px 8px;
             text-align: center;
             border: 1px solid #dee2e6;
@@ -56,12 +56,12 @@
             width: 130px;
         }
 
-        .sg-table th {
+        .vw-table th {
             background-color: #f8f9fa;
         }
 
-        .sg-table th:first-child,
-        .sg-table td:first-child {
+        .vw-table th:first-child,
+        .vw-table td:first-child {
             background-color: #fff;
             z-index: 1;
             text-align: left;
@@ -72,17 +72,17 @@
             position: sticky;
         }
 
-        .sg-table thead,
+        .vw-table thead,
         tr>th {
             position: sticky;
         }
 
-        .sg-table thead {
+        .vw-table thead {
             top: 0;
             z-index: 2;
         }
 
-        .sg-table tr>th:first-child {
+        .vw-table tr>th:first-child {
             z-index: 3;
         }
 
@@ -96,14 +96,14 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="index.html" class="btn btn-outline-secondary btn-sm">&larr; Back to Home</a>
-            <h2 class="m-0">SG Calculator</h2>
+            <h2 class="m-0">Volume to metal weight Calculator</h2>
             <div style="width: 100px;"></div> <!-- Spacer for balance -->
         </div>
-        <div class="sg-table-container">
-            <table class="sg-table" id="sg-table">
+        <div class="vw-table-container">
+            <table class="vw-table" id="vw-table">
                 <thead>
                     <tr id="header-row">
-                        <th>Source material</th>
+                        <th>Volume</th>
                         <!-- Material headers will be rendered here -->
                     </tr>
                 </thead>
@@ -114,16 +114,16 @@
         </div>
     </div>
     <script>
+        const volumeUnits = ["mm³", "cm³"]
         // Define the materials list
-        const materials = ["Wax", "925 silver", "fine silver",
+        const materials = ["925 silver", "fine silver",
             "palladium",
             "9K gold", "14K gold", "18K gold", "22K gold", "24K gold",
             "platinum", "titanium",
             "brass"
         ];
-        const relative_sg_wax = {
-            "Wax": 1.0,
-            "925 silver": 10.30,
+        const densityCubiccm = {
+            "925 silver": 10.36,
             "fine silver": 10.53,
             "9K gold": 11.2,
             "14K gold": 14.1,
@@ -136,6 +136,11 @@
             "brass": 8.5
         };
 
+        const unitConversion = {
+            "mm³": 0.001,
+            "cm³": 1
+        }
+
         // Get the header row and calculator grid elements
         const headerRow = document.getElementById('header-row');
         const calculatorGrid = document.getElementById('calculator-grid');
@@ -147,8 +152,8 @@
             headerRow.appendChild(th);
         }
 
-        // Then, create rows for each material
-        for (let i = 0; i < materials.length; i++) {
+        // Then, create rows for each volume unit
+        for (let i = 0; i < volumeUnits.length; i++) {
             // Create a table row
             const tr = document.createElement('tr');
             tr.id = `material-row-${i}`;
@@ -160,7 +165,7 @@
             const inputContainer = document.createElement('div');
 
             const label = document.createElement('label');
-            label.textContent = materials[i] + " (g)";
+            label.textContent = volumeUnits[i];
             label.setAttribute('for', `input${i}`);
 
             const input = document.createElement('input');
@@ -198,28 +203,27 @@
         }
 
         // Function to update results based on input value
-        function updateResults(materialIndex, value) {
+        function updateResults(volumeIndex, value) {
             if (!value) {
                 // Display "-" in all cells when input is empty
                 for (let j = 0; j < materials.length; j++) {
-                    document.getElementById(`result-${materialIndex}-${j}`).textContent = "-";
+                    document.getElementById(`result-${volumeIndex}-${j}`).textContent = "-";
                 }
                 return;
             }
 
             const inputValue = parseFloat(value);
-            const sourceMaterial = materials[materialIndex];
-            const sourceRatio = relative_sg_wax[sourceMaterial];
+            const volumeConversion = unitConversion[volumeUnits[volumeIndex]]
 
             // Update each result item with the calculated value
             for (let j = 0; j < materials.length; j++) {
                 const targetMaterial = materials[j];
-                const targetRatio = relative_sg_wax[targetMaterial];
+                const density = densityCubiccm[targetMaterial] * volumeConversion;
 
                 // Calculate the equivalent weight based on relative specific gravity
-                const equivalentWeight = (inputValue * targetRatio / sourceRatio).toFixed(2);
+                const equivalentWeight = (inputValue * density).toFixed(2);
 
-                const resultElement = document.getElementById(`result-${materialIndex}-${j}`);
+                const resultElement = document.getElementById(`result-${volumeIndex}-${j}`);
                 resultElement.textContent = `${equivalentWeight}g`;
             }
         }
