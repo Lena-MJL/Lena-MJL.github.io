@@ -119,14 +119,18 @@
     <script>
         const volumeUnits = ["mm³", "cm³"]
         // Define the materials list
-        const materials = ["925 silver", "fine silver",
-            "palladium",
+        const materials = [
+            "925 silver", "fine silver",
             "9K gold", "14K gold", "18K gold", "22K gold", "24K gold",
-            "platinum", "titanium",
-            "brass"
+            "palladium",
+            "platinum", 
+            "brass",
+            "bronze",
+            "titanium",
         ];
         const densityCubiccm = {
             "925 silver": 10.36,
+            "fine silver": 10.53,
             "bronze": 8.8,
             "brass": 8.5,
             "9K gold": 11.2,
@@ -136,7 +140,6 @@
             "24K gold": 19.5,
             "platinum": 20.6,
             "palladium": 12.02,
-            "fine silver": 10.53,
             "titanium": 4.51,
         };
 
