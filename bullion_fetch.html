@@ -24,10 +24,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-top: 20px;
         }
-        .product-image {
-            max-width: 200px;
-            height: auto;
-        }
         .loading {
             text-align: center;
             padding: 20px;
@@ -41,11 +37,11 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="index.html" class="btn btn-outline-secondary btn-sm">&larr; Back to Home</a>
-            <h1>Bullion Information</h1>
-            <div style="width: 100px;"></div>
+            <h2>Bullion price per gram on Cooksongold.com</h2>
+            <div class="ms-5"></div>
         </div>
         
-        <div id="product-container">
+        <div id="bullion-container">
             <div class="alert alert-info" role="alert">
                 <div class="spinner-border spinner-border-sm me-2" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -58,14 +54,14 @@
     <script>
         // Define all materials to fetch
         const materials = [
-            { name: 'Sterling Silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Sterling-Silver-Grain,-100--------Recycled-Silver-prcode-ASA-000' },
-            { name: 'Fine Silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Silver-Grain,-100-Recycled---Silver-prcode-ASF-000' },
-            { name: '9ct Gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/9ct-Casting-Yellow-Grain,-100-----Recycled-Gold-prcode-AAB-000' },
-            { name: '14ct Gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/14ct-Ay-Yellow-Grain,-100-Recycled-Gold-prcode-AGE-000' },
-            { name: '18ct Gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/18ct-Hcb-Yellow-Grain,-100--------Recycled-Gold-prcode-ALO-000' },
-            { name: 'Fine Gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Gold-Grain-Minimum-99.96-Au,-100-Recycled-Gold-prcode-ARZ-000' },
-            { name: 'Palladium', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Palladium-Casting-Pieces-prcode-APAL-000' },
-            { name: 'Platinum', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Platinum-Hc-Casting-Pieces-prcode-BXB-000' }
+            { name: '925 silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Sterling-Silver-Grain,-100--------Recycled-Silver-prcode-ASA-000' },
+            { name: 'fine silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Silver-Grain,-100-Recycled---Silver-prcode-ASF-000' },
+            { name: '9K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/9ct-Casting-Yellow-Grain,-100-----Recycled-Gold-prcode-AAB-000' },
+            { name: '14K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/14ct-Ay-Yellow-Grain,-100-Recycled-Gold-prcode-AGE-000' },
+            { name: '18K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/18ct-Hcb-Yellow-Grain,-100--------Recycled-Gold-prcode-ALO-000' },
+            { name: '24K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Gold-Grain-Minimum-99.96-Au,-100-Recycled-Gold-prcode-ARZ-000' },
+            { name: 'palladium', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Palladium-Casting-Pieces-prcode-APAL-000' },
+            { name: 'platinum', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Platinum-Hc-Casting-Pieces-prcode-BXB-000' }
         ];
         
         // CORS proxy URLs (many public options for improved compatibility)
@@ -112,14 +108,10 @@
             // Extract product information
             const productName = doc.querySelector('h1, [data-product-name], .product-title')?.textContent.trim() || 'Product Name';
             const productPrice = extractPrice(doc);
-            const productDescription = doc.querySelector('[data-product-description], .description, .product-description')?.textContent.trim() || 'No description available';
-            const productImage = doc.querySelector('img[data-product-image], .product-image img')?.src || '';
             
             return {
                 name: productName,
                 price: productPrice,
-                description: productDescription,
-                image: productImage,
                 url: productUrl
             };
         }
@@ -146,7 +138,7 @@
         }
 
         function displayAllProducts(productsData) {
-            const container = document.getElementById('product-container');
+            const container = document.getElementById('bullion-container');
             
             let html_content = '<div class="row">';
             
@@ -158,14 +150,10 @@
                                 <h5 class="card-title">${product.name}</h5>
                 `;
                 
-                if (product.image) {
-                    html_content += `<img src="${product.image}" alt="${product.name}" class="product-image mb-3" />`;
-                }
                 
                 html_content += `
                                 <p class="card-text"><strong>Price:</strong> ${product.price}</p>
-                                <p class="card-text"><strong>Description:</strong> ${product.description}</p>
-                                <a href="${product.url}" target="_blank" class="btn btn-primary btn-sm">View on Cookson Gold</a>
+                                <a href="${product.url}" target="_blank" class="btn btn-primary btn-sm">Product link</a>
                             </div>
                         </div>
                     </div>
@@ -177,7 +165,7 @@
         }
 
         function displayError() {
-            const container = document.getElementById('product-container');
+            const container = document.getElementById('bullion-container');
             container.innerHTML = `
                 <div class="alert alert-danger">
                     <h4 class="alert-heading">Unable to Fetch Product Information</h4>
@@ -201,8 +189,6 @@
                     productsData.push({
                         name: material.name,
                         price: 'Unable to load',
-                        description: 'Could not fetch information',
-                        image: '',
                         url: material.url
                     });
                 }
