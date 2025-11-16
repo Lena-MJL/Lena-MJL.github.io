@@ -107,7 +107,7 @@
             const item = typeof items[i] === 'string' ? { url: items[i], name: items[i] } : items[i];
             // use cached if recent
             const cached = cache[item.url];
-            if (cached && Date.now() - cached.t < (1000 * 60 * 60)) { // 1 hour cache
+            if (cached && Date.now() - cached.t < (1000 * 60 * 60 * 6)) { // 6 hour cache
                 results.push({ name: item.name, url: item.url, price: cached.price, cached: true });
             } else {
                 const res = await fetchPrice(item.url);
