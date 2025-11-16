@@ -114,9 +114,9 @@
                 results.push({ name: item.name, url: item.url, price, cached: false });
                 // store in cache
                 cache[item.url] = { price, t: Date.now() };
+                // delay between fetches except after last
+                if (i < items.length - 1 && delayMs > 0) await new Promise(r => setTimeout(r, delayMs));
             }
-            // delay between fetches except after last
-            if (i < items.length - 1 && delayMs > 0) await new Promise(r => setTimeout(r, delayMs));
         }
 
         saveCache(cache);
