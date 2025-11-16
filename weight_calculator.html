@@ -63,26 +63,21 @@
         .vw-table th:first-child,
         .vw-table td:first-child {
             background-color: #fff;
+            position: sticky;
+            left: 0;
             z-index: 1;
             text-align: left;
             width: 195px;
             /* 1.5x the standard column width */
-            left: 0;
-            z-index: 1;
-            position: sticky;
-        }
-
-        .vw-table thead,
-        tr>th {
-            position: sticky;
         }
 
         .vw-table thead {
+            position: sticky;
             top: 0;
             z-index: 2;
         }
 
-        .vw-table tr>th:first-child {
+        .vw-table thead tr:first-child th:first-child {
             z-index: 3;
         }
 
