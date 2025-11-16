@@ -51,163 +51,60 @@
         </div>
     </div>
 
+    <script src="js/bullion_fetcher.js"></script>
     <script>
-        // Define all materials to fetch
-        const materials = [
-            { name: '925 silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Sterling-Silver-Grain,-100--------Recycled-Silver-prcode-ASA-000' },
-            { name: 'fine silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Silver-Grain,-100-Recycled---Silver-prcode-ASF-000' },
-            { name: '9K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/9ct-Casting-Yellow-Grain,-100-----Recycled-Gold-prcode-AAB-000' },
-            { name: '14K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/14ct-Ay-Yellow-Grain,-100-Recycled-Gold-prcode-AGE-000' },
-            { name: '18K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/18ct-Hcb-Yellow-Grain,-100--------Recycled-Gold-prcode-ALO-000' },
-            { name: '24K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Gold-Grain-Minimum-99.96-Au,-100-Recycled-Gold-prcode-ARZ-000' },
-            { name: 'palladium', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Palladium-Casting-Pieces-prcode-APAL-000' },
-            { name: 'platinum', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Platinum-Hc-Casting-Pieces-prcode-BXB-000' }
-        ];
-        
-        // CORS proxy URLs (many public options for improved compatibility)
-        // Note: public proxies can be unreliable or rate-limited. Prefer a server-side proxy for production.
-        const corsProxies = [
-            'https://api.allorigins.win/raw?url=',
-            'https://api.allorigins.cf/raw?url=',
-            'https://thingproxy.freeboard.io/fetch/',
-            'https://cors-anywhere.herokuapp.com/',
-            'https://api.codetabs.com/v1/proxy?quest=',
-            'https://cors.bridged.cc/',
-            'https://corsproxy.io/?',
-            'https://yacdn.org/proxy/',
-            'https://proxy.cors.sh/',
-            'https://cors.eu.org/?u='
-        ];
-
-        async function fetchProductInfo(productUrl) {
-            for (let proxy of corsProxies) {
-                try {
-                    const proxyUrl = proxy + encodeURIComponent(productUrl);
-                    const response = await fetch(proxyUrl);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    
-                    const html = await response.text();
-                    return html;
-                } catch (error) {
-                    console.log(`Proxy ${proxy} failed:`, error);
-                    continue;
-                }
-            }
-            
-            return null;
-        }
-
-        function extractProductInfo(html, productUrl) {
-            // Parse HTML
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            
-            // Extract product information
-            const productName = doc.querySelector('h1, [data-product-name], .product-title')?.textContent.trim() || 'Product Name';
-            const productPrice = extractPrice(doc);
-            
-            return {
-                name: productName,
-                price: productPrice,
-                url: productUrl
-            };
-        }
-
-        function extractPrice(doc) {
-            // Try multiple selectors to find price
-            const priceSelectors = [
-                '#b_pricing_now',
-                '.product-price',
-                '[data-price]',
-                '.price',
-                '.product-pricing',
-                'span[class*="price"]'
-            ];
-            
-            for (let selector of priceSelectors) {
-                const element = doc.querySelector(selector);
-                if (element) {
-                    return element.textContent.trim();
-                }
-            }
-            
-            return 'Price not available';
-        }
-
-        function displayAllProducts(productsData) {
+        // Use shared BullionFetcher to load product prices and display them
+        async function loadAndShow() {
             const container = document.getElementById('bullion-container');
-            
-            let html_content = '<div class="row">';
-            
-            productsData.forEach(product => {
-                html_content += `
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">${product.name}</h5>
-                `;
-                
-                
-                html_content += `
-                                <p class="card-text"><strong>Price:</strong> ${product.price}</p>
-                                <a href="${product.url}" target="_blank" class="btn btn-primary btn-sm">Product link</a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html_content += '</div>';
-            container.innerHTML = html_content;
-        }
-
-        function displayError() {
-            const container = document.getElementById('bullion-container');
-            container.innerHTML = `
-                <div class="alert alert-danger">
-                    <h4 class="alert-heading">Unable to Fetch Product Information</h4>
-                    <p>Unfortunately, we couldn't retrieve the product information from Cookson Gold due to website access restrictions.</p>
-                    <p>Please visit <a href="https://www.cooksongold.com/" target="_blank" class="alert-link">Cookson Gold directly</a> to view current prices.</p>
-                </div>
-            `;
-        }
-
-        async function loadAllProducts() {
-            const productsData = [];
-            
-            for (let material of materials) {
-                const html = await fetchProductInfo(material.url);
-                
-                if (html) {
-                    const productInfo = extractProductInfo(html, material.url);
-                    productsData.push(productInfo);
-                } else {
-                    // Add error placeholder for this product
-                    productsData.push({
-                        name: material.name,
-                        price: 'Unable to load',
-                        url: material.url
-                    });
-                }
-                
-                // Add 2 second delay between requests (except after the last one)
-                if (material !== materials[materials.length - 1]) {
-                    await new Promise(resolve => setTimeout(resolve, 4000));
-                }
-            }
-            
-            if (productsData.length > 0) {
-                displayAllProducts(productsData);
-            } else {
+            container.innerHTML = '<div class="alert alert-info">Loading product information...</div>';
+            try {
+                const results = await BullionFetcher.fetchMultiple();
+                // results: [{name,url,price,cached}]
+                displayAllProducts(results.map(r => ({ name: r.name, price: r.price, url: r.url })));
+            } catch (e) {
+                console.error(e);
                 displayError();
             }
         }
 
-        // Load all products when page loads
-        document.addEventListener('DOMContentLoaded', loadAllProducts);
+        // reuse existing display functions (defined above in the original file)
+        // If they are not present, define minimal fallbacks
+        if (typeof displayAllProducts !== 'function') {
+            function displayAllProducts(productsData) {
+                const container = document.getElementById('bullion-container');
+                let html_content = '<div class="row">';
+                productsData.forEach(product => {
+                    html_content += `
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">${product.name}</h5>
+                                    <p class="card-text"><strong>Price:</strong> ${product.price}</p>
+                                    <a href="${product.url}" target="_blank" class="btn btn-primary btn-sm">Product link</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html_content += '</div>';
+                container.innerHTML = html_content;
+            }
+        }
+
+        if (typeof displayError !== 'function') {
+            function displayError() {
+                const container = document.getElementById('bullion-container');
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h4 class="alert-heading">Unable to Fetch Product Information</h4>
+                        <p>Unfortunately, we couldn't retrieve the product information from Cookson Gold due to website access restrictions.</p>
+                        <p>Please visit <a href="https://www.cooksongold.com/" target="_blank" class="alert-link">Cookson Gold directly</a> to view current prices.</p>
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAndShow);
     </script>
 </body>
 </html>

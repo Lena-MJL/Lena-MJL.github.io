@@ -97,6 +97,9 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="index.html" class="btn btn-outline-secondary btn-sm">&larr; Back to Home</a>
             <h2 class="m-0">SG Calculator</h2>
+            <h4>Prices of bullion based on links provided at the bottom. Please wait until they are loaded and displayed
+                in the header of the table to see the price estimates or use straight away for pure weight calculations.
+            </h4>
             <div style="width: 100px;"></div> <!-- Spacer for balance -->
         </div>
         <div class="sg-table-container">
@@ -221,9 +224,81 @@
                 const equivalentWeight = (inputValue * targetRatio / sourceRatio).toFixed(2);
 
                 const resultElement = document.getElementById(`result-${materialIndex}-${j}`);
-                resultElement.textContent = `${equivalentWeight}g`;
+                resultElement.innerHTML = `${equivalentWeight}g`;
+
+                if (window.bullionPrices === undefined) {
+                    continue; // bullion prices not loaded yet
+                } else {
+                    const found = window.bullionPrices[materials[j]];
+                    if (found && found.price) {
+                        // append price on new line
+                        const price = found.price.substring(1); // remove currency symbol
+                        resultElement.innerHTML += `<br><small>£${(price * equivalentWeight).toFixed(2)}</small>`;
+                    }
+                }
             }
         }
+    </script>
+
+    <!-- Embedded bullion prices (reuse shared fetcher) -->
+    <div class="container mt-4" style="margin-top: 20px;">
+        <h3>Bullion prices from cooksongold.com</h3>
+        <div id="bullion-embedded">Loading bullion prices…</div>
+    </div>
+
+    <script src="js/bullion_fetcher.js"></script>
+    <script>
+        async function embedBullion() {
+            const container = document.getElementById('bullion-embedded');
+            container.innerHTML = '<div class="alert alert-info">Loading bullion prices…</div>';
+            try {
+                // fetch prices (2s delay between requests)
+                const results = await BullionFetcher.fetchMultiple();
+                // render simple list
+                let out = '<div class="row">';
+                results.forEach(r => {
+                    out += `
+                        <div class="col-md-3 mb-2">
+                            <div class="card">
+                                <div class="card-body p-2">
+                                    <strong>${r.name}</strong>
+                                    <span class="text-muted"><a href="${r.url}" target="_blank">Product link</a></span>
+                                    <br>
+                                    <span class="text-muted">${r.price} per gram</span>
+
+                                    <!--${r.cached ? '<div class="small text-muted">cached</div>' : ''} -->
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                out += '</div>';
+                container.innerHTML = out;
+
+                // expose prices map for other scripts
+                window.bullionPrices = results.reduce((m, v) => { m[v.name] = v; return m; }, {});
+
+                // update table headers in this page where material names match
+                const headerRow = document.getElementById('header-row');
+                if (headerRow) {
+                    // headerRow children correspond to materials in same order, first child is Source material
+                    Array.from(headerRow.children).forEach(th => {
+                        const name = th.textContent.trim();
+                        const found = window.bullionPrices[name];
+                        if (found && found.price) {
+                            // append price small
+                            th.innerHTML = `${name}<div class="small text-muted">${found.price}/g</div>`;
+                        }
+                    });
+                }
+
+            } catch (e) {
+                console.error(e);
+                container.innerHTML = '<div class="alert alert-danger">Unable to load bullion prices.</div>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', embedBullion);
     </script>
 </body>
 
