@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rainbow Splitter</title>
+
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .input-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group label {
+            margin: 0;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-group input {
+            width: 100px;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #7c3aed;
+        }
+
+        .input-group button {
+            padding: 8px 20px;
+            background-color: #7c3aed;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .input-group button:hover {
+            background-color: #6d28d9;
+        }
+
+        .colors-display {
+            display: flex;
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+        }
+
+        .color-band {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .color-band:hover {
+            flex: 1.2;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-label {
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: bold;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            font-size: 14px;
+            z-index: 1;
+        }
+
+        .color-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-info h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .color-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .color-item {
+            padding: 12px;
+            border-radius: 6px;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .color-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .copy-notification.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="btn btn-link">&larr; Back to Home</a>
+    <div class="container">
+        <div class="header">
+            <h1>🌈 Rainbow Splitter</h1>
+            <p>Enter a number to split the rainbow spectrum into that many distinct colors</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label for="colorCount">Number of Colors:</label>
+                <input type="number" id="colorCount" min="1" max="360" value="7">
+                <button onclick="generateRainbow()">Generate</button>
+            </div>
+        </div>
+
+        <div class="colors-display" id="colorsDisplay"></div>
+
+        <div class="color-info">
+            <h3>Color Values (Click to copy)</h3>
+            <div class="color-list" id="colorList"></div>
+        </div>
+    </div>
+
+    <div class="copy-notification" id="copyNotification">Copied to clipboard!</div>
+
+    <script>
+        function generateRainbow() {
+            const colorCount = parseInt(document.getElementById('colorCount').value);
+
+            if (isNaN(colorCount) || colorCount < 1) {
+                alert('Please enter a valid number greater than 0');
+                return;
+            }
+
+            const colors = [];
+            const step = 360 / colorCount;
+
+            for (let i = 0; i < colorCount; i++) {
+                const hue = (i * step) % 360;
+                const saturation = 100;
+                const lightness = 50;
+                const hslColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+                const hexColor = hslToHex(hue, saturation, lightness);
+                const rgbColor = hslToRgb(hue, saturation, lightness);
+
+                colors.push({
+                    index: i + 1,
+                    hsl: hslColor,
+                    hex: hexColor,
+                    rgb: rgbColor,
+                    hue: hue.toFixed(2)
+                });
+            }
+
+            displayColors(colors);
+        }
+
+        function hslToRgb(h, s, l) {
+            s /= 100;
+            l /= 100;
+            const k = n => (n + h / 30) % 12;
+            const a = s * Math.min(l, 1 - l);
+            const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+            const r = Math.round(255 * f(0));
+            const g = Math.round(255 * f(8));
+            const b = Math.round(255 * f(4));
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function hslToHex(h, s, l) {
+            s /= 100;
+            l /= 100;
+            const k = n => (n + h / 30) % 12;
+            const a = s * Math.min(l, 1 - l);
+            const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+            const toHex = n => {
+                const hex = Math.round(255 * f(n)).toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            };
+            return '#' + toHex(0) + toHex(8) + toHex(4);
+        }
+
+        function displayColors(colors) {
+            const display = document.getElementById('colorsDisplay');
+            const list = document.getElementById('colorList');
+
+            display.innerHTML = '';
+            list.innerHTML = '';
+
+            colors.forEach(color => {
+                // Display bar
+                const band = document.createElement('div');
+                band.className = 'color-band';
+                band.style.backgroundColor = color.hsl;
+                band.innerHTML = `<div class="color-label">${color.index}</div>`;
+                display.appendChild(band);
+
+                // Color info
+                const item = document.createElement('div');
+                item.className = 'color-item';
+                item.style.backgroundColor = color.hsl;
+                item.innerHTML = `
+                    <div><strong>Color ${color.index}</strong></div>
+                    <div>Hue: ${color.hue}°</div>
+                    <div style="margin-top: 6px; font-size: 11px; opacity: 0.9;">${color.hex}</div>
+                `;
+                item.onclick = () => copyToClipboard(color.hex);
+                list.appendChild(item);
+            });
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const notification = document.getElementById('copyNotification');
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        // Generate rainbow on page load
+        window.addEventListener('load', () => {
+            generateRainbow();
+        });
+
+        // Allow Enter key to generate
+        document.getElementById('colorCount').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                generateRainbow();
+            }
+        });
+    </script>
+</body>
+</html>
