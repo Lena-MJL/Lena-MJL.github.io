@@ -14,7 +14,7 @@
         'https://cors.eu.org/?u='
     ];
 
-    const defaultDelayMs = 4000;
+    const defaultDelayMs = 2000;
     const defaultBullionSources = [
             { name: '925 silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Sterling-Silver-Grain,-100--------Recycled-Silver-prcode-ASA-000' },
             { name: 'fine silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Silver-Grain,-100-Recycled---Silver-prcode-ASF-000' },
