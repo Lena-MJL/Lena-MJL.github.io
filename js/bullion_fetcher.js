@@ -16,16 +16,16 @@
 
     const defaultDelayMs = 2000;
     const defaultBullionSources = [
-            { name: '925 silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Sterling-Silver-Grain,-100--------Recycled-Silver-prcode-ASA-000' },
-            { name: 'fine silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Silver-Grain,-100-Recycled---Silver-prcode-ASF-000' },
-            { name: '9K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/9ct-Casting-Yellow-Grain,-100-----Recycled-Gold-prcode-AAB-000' },
-            { name: '14K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/14ct-Ay-Yellow-Grain,-100-Recycled-Gold-prcode-AGE-000' },
-            { name: '18K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/18ct-Hcb-Yellow-Grain,-100--------Recycled-Gold-prcode-ALO-000' },
-            { name: '22K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/22ct-Yellow-Ds-Grain,-100-Recycled-Gold-prcode-AQA-000'},
-            { name: '24K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Gold-Grain-Minimum-99.96-Au,-100-Recycled-Gold-prcode-ARZ-000' },
-            { name: 'palladium', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Palladium-Casting-Pieces-prcode-APAL-000' },
-            { name: 'platinum', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Platinum-Hc-Casting-Pieces-prcode-BXB-000' }
-        ];
+        { name: '925 silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Sterling-Silver-Grain,-100--------Recycled-Silver-prcode-ASA-000' },
+        { name: 'fine silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Silver-Grain,-100-Recycled---Silver-prcode-ASF-000' },
+        { name: '9K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/9ct-Casting-Yellow-Grain,-100-----Recycled-Gold-prcode-AAB-000' },
+        { name: '14K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/14ct-Ay-Yellow-Grain,-100-Recycled-Gold-prcode-AGE-000' },
+        { name: '18K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/18ct-Hcb-Yellow-Grain,-100--------Recycled-Gold-prcode-ALO-000' },
+        { name: '22K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/22ct-Yellow-Ds-Grain,-100-Recycled-Gold-prcode-AQA-000' },
+        { name: '24K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Gold-Grain-Minimum-99.96-Au,-100-Recycled-Gold-prcode-ARZ-000' },
+        { name: 'palladium', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Palladium-Casting-Pieces-prcode-APAL-000' },
+        // { name: 'platinum', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Platinum-Hc-Casting-Pieces-prcode-BXB-000' }
+    ];
     const storageKey = 'bullion_prices_v1';
 
     // simple logger
@@ -75,7 +75,7 @@
             const now = Date.now();
             const oneDayMs = 1000 * 60 * 60 * 24; // 24 hours
             let dirty = false;
-            
+
             // Remove entries older than 24 hours
             for (let url in cache) {
                 if (cache[url].t && now - cache[url].t > oneDayMs) {
@@ -83,10 +83,10 @@
                     dirty = true;
                 }
             }
-            
+
             // Save cleaned cache if any entries were removed
             if (dirty) saveCache(cache);
-            
+
             return cache;
         } catch (e) { return {}; }
     }
@@ -113,8 +113,10 @@
                 const res = await fetchPrice(item.url);
                 const price = res.price || 'Unavailable';
                 results.push({ name: item.name, url: item.url, price, cached: false });
-                // store in cache
-                cache[item.url] = { price, t: Date.now() };
+                if (res.price) {
+                    // store in cache
+                    cache[item.url] = { price: price, t: Date.now() };
+                }
                 // delay between fetches except after last
                 if (i < items.length - 1 && delayMs > 0) await new Promise(r => setTimeout(r, delayMs));
             }

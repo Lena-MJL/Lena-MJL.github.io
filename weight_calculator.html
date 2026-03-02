@@ -101,7 +101,9 @@
         }
 
         @media (max-width: 768px) {
-            body, html {
+
+            body,
+            html {
                 height: auto;
                 width: 100%;
             }
@@ -174,6 +176,7 @@
         }
 
         @media (max-width: 480px) {
+
             .vw-table th,
             .vw-table td {
                 padding: 3px 4px;
@@ -229,7 +232,7 @@
             "925 silver", "fine silver",
             "9K gold", "14K gold", "18K gold", "22K gold", "24K gold",
             "palladium",
-            "platinum", 
+            "platinum",
             "brass",
             "bronze",
             "titanium",
@@ -376,15 +379,15 @@
                                     <strong>${r.name}</strong>
                                     <span class="text-muted"><a href="${r.url}" target="_blank">Product link</a></span>
                                     <br>
-                                    <span class="text-muted">${r.price} per gram</span>
-
-                                    <!--${r.cached ? '<div class="small text-muted">cached</div>' : ''} -->
+                                    <span class="text-muted">
+                                        ${r.price === "Unavailable" ? "Unavailable" :
+                            r.price + (r.cached ? '*' : '') + " per gram"}</span>
                                 </div>
                             </div>
                         </div>
                     `;
                 });
-                out += '</div>';
+                out += '<div class="text-muted small" style="margin-left: 5%;">* means price was cached in the last 6 hours</div></div>';
                 container.innerHTML = out;
 
                 // expose prices map for other scripts
