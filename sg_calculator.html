@@ -363,11 +363,89 @@
     <script>
         async function embedBullion() {
             const container = document.getElementById('bullion-embedded');
-            container.innerHTML = '<div class="alert alert-info">Loading bullion prices…</div>';
+            container.innerHTML = '<div id="loading-message" class="alert alert-info">Loading bullion prices…</div><div id="prices-list"></div>';
+            
+            // Initialize bullionPrices early so calculations can use it
+            if (!window.bullionPrices) {
+                window.bullionPrices = {};
+            }
+            
             try {
-                // fetch prices (2s delay between requests)
-                const results = await BullionFetcher.fetchMultiple();
-                // render simple list
+                // Define a callback to update UI as each price is found
+                const onPriceFound = (result) => {
+                    // Add to bullionPrices map
+                    window.bullionPrices[result.name] = result;
+                    
+                    // Update the table header for this material
+                    const headerRow = document.getElementById('header-row');
+                    if (headerRow) {
+                        Array.from(headerRow.children).forEach(th => {
+                            const name = th.textContent.trim();
+                            if (name === result.name && result.price !== 'Unavailable') {
+                                th.innerHTML = `${result.name}<div class="small text-muted">${result.price}/g</div>`;
+                            }
+                        });
+                    }
+                    
+                    // Update all calculated results that include this material
+                    for (let i = 0; i < materials.length; i++) {
+                        const input = document.getElementById(`input${i}`);
+                        if (input) {
+                            updateResults(i, input.value);
+                        }
+                    }
+                    
+                    // Re-render the list with current prices in the prices-list container
+                    const prices = Object.values(window.bullionPrices);
+                    const pricesList = document.getElementById('prices-list');
+                    if (pricesList && prices.length > 0) {
+                        let out = '<div class="row">';
+                        prices.forEach(r => {
+                            out += `
+                                <div class="col-md-3 mb-2">
+                                    <div class="card">
+                                        <div class="card-body p-2">
+                                            <strong>${r.name}</strong>
+                                            <span class="text-muted"><a href="${r.url}" target="_blank">Product link</a></span>
+                                            <br>
+                                            <span class="text-muted">
+                                                ${r.price === "Unavailable" ? "Unavailable" :
+                                r.price + (r.cached ? '*' : '') + " per gram"}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        out += '<div class="text-muted small" style="margin-left: 5%;">* means price was cached in the last 6 hours</div></div>';
+                        pricesList.innerHTML = out;
+                    }
+                };
+                
+                // Fetch prices with callback for incremental display
+                const results = await BullionFetcher.fetchMultipleWithCallback(undefined, 2000, onPriceFound);
+                
+                // Remove loading message now that fetch is complete
+                const loadingMessage = document.getElementById('loading-message');
+                if (loadingMessage) {
+                    loadingMessage.remove();
+                }
+                
+                // Expose prices map for other scripts
+                window.bullionPrices = results.reduce((m, v) => { m[v.name] = v; return m; }, {});
+                
+                // Update table headers in this page where material names match (final pass)
+                const headerRow = document.getElementById('header-row');
+                if (headerRow) {
+                    Array.from(headerRow.children).forEach(th => {
+                        const name = th.textContent.trim();
+                        const found = window.bullionPrices[name];
+                        if (found && found.price && found.price !== 'Unavailable') {
+                            th.innerHTML = `${name}<div class="small text-muted">${found.price}/g</div>`;
+                        }
+                    });
+                }
+                
+                // Final render of the list
                 let out = '<div class="row">';
                 results.forEach(r => {
                     out += `
@@ -386,23 +464,9 @@
                     `;
                 });
                 out += '<div class="text-muted small" style="margin-left: 5%;">* means price was cached in the last 6 hours</div></div>';
-                container.innerHTML = out;
-
-                // expose prices map for other scripts
-                window.bullionPrices = results.reduce((m, v) => { m[v.name] = v; return m; }, {});
-
-                // update table headers in this page where material names match
-                const headerRow = document.getElementById('header-row');
-                if (headerRow) {
-                    // headerRow children correspond to materials in same order, first child is Source material
-                    Array.from(headerRow.children).forEach(th => {
-                        const name = th.textContent.trim();
-                        const found = window.bullionPrices[name];
-                        if (found && found.price) {
-                            // append price small
-                            th.innerHTML = `${name}<div class="small text-muted">${found.price}/g</div>`;
-                        }
-                    });
+                const pricesList = document.getElementById('prices-list');
+                if (pricesList) {
+                    pricesList.innerHTML = out;
                 }
 
             } catch (e) {

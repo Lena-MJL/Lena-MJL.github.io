@@ -11,7 +11,11 @@
         'https://corsproxy.io/?',
         'https://yacdn.org/proxy/',
         'https://proxy.cors.sh/',
-        'https://cors.eu.org/?u='
+        'https://cors.eu.org/?u=',
+        'https://cors-proxy.fringe.zone/?url=',
+        'https://api.allorigins.win/get?url=',
+        'https://getproxyapi.com/api/proxy?query=',
+        'https://api.crossoriginproxy.com/fetch?u='
     ];
 
     const defaultDelayMs = 2000;
@@ -30,23 +34,6 @@
 
     // simple logger
     function log(...args) { console.log('[BullionFetcher]', ...args); }
-
-    async function fetchViaProxies(url) {
-        for (let proxy of corsProxies) {
-            try {
-                // some proxies expect prefix, some expect full query param; here we use prefix+encoded
-                const proxyUrl = proxy + encodeURIComponent(url);
-                const resp = await fetch(proxyUrl);
-                if (!resp.ok) throw new Error(`status ${resp.status}`);
-                const text = await resp.text();
-                return text;
-            } catch (e) {
-                log('proxy failed', proxy, e.message);
-                continue;
-            }
-        }
-        return null;
-    }
 
     function parsePriceFromHtml(html) {
         if (!html) return null;
@@ -92,10 +79,32 @@
     }
 
     async function fetchPrice(url) {
-        const html = await fetchViaProxies(url);
-        if (!html) return { url, price: null, error: 'Fetch failed' };
-        const price = parsePriceFromHtml(html) || null;
-        return { url, price };
+        // Try each proxy until we get valid HTML that contains a price
+        log('fetching price for', url);
+        for (let proxy of corsProxies) {
+            try {
+                const proxyUrl = proxy + encodeURIComponent(url);
+                const resp = await fetch(proxyUrl);
+                if (!resp.ok) throw new Error(`status ${resp.status}`);
+                const text = await resp.text();
+                
+                // Try to parse price from this response
+                const price = parsePriceFromHtml(text);
+                if (price) {
+                    log('success via proxy', proxy);
+                    return { url, price };
+                }
+                // If no price found, try next proxy
+                log('no price found via proxy', proxy);
+                continue;
+            } catch (e) {
+                log('proxy failed', proxy, e.message);
+                continue;
+            }
+        }
+        // No proxy returned valid price
+        log('no valid price found from any proxy for', url);
+        return { url, price: null, error: 'No valid price found from any proxy' };
     }
 
     async function fetchMultiple(items = defaultBullionSources, delayMs = defaultDelayMs) {
@@ -128,10 +137,62 @@
         return results;
     }
 
+    async function fetchMultipleWithCallback(items = defaultBullionSources, delayMs = defaultDelayMs, callback = null) {
+        // items: [{name, url}] or array of urls
+        // callback: function(result) called for each price as it's found
+        const results = new Array(items.length); // pre-allocate with correct size to maintain order
+        const cache = loadCache();
+        const uncachedQueue = []; // queue of {index, item}
+
+        // First pass: process cached items immediately, queue uncached for sequential fetching
+        for (let i = 0; i < items.length; i++) {
+            const item = typeof items[i] === 'string' ? { url: items[i], name: items[i] } : items[i];
+            const cached = cache[item.url];
+            
+            if (cached && Date.now() - cached.t < (1000 * 60 * 60 * 6)) { // 6 hour cache
+                const result = { name: item.name, url: item.url, price: cached.price, cached: true };
+                results[i] = result;
+                // call callback immediately for cached
+                if (callback) callback(result);
+            } else {
+                // Queue uncached for sequential fetching
+                uncachedQueue.push({ index: i, item });
+            }
+        }
+
+        // Second pass: process uncached items sequentially with delays
+        for (let qIdx = 0; qIdx < uncachedQueue.length; qIdx++) {
+            const { index, item } = uncachedQueue[qIdx];
+            
+            // Fetch this item
+            const res = await fetchPrice(item.url);
+            const price = res.price || 'Unavailable';
+            const result = { name: item.name, url: item.url, price, cached: false };
+            results[index] = result;
+            if (res.price) {
+                cache[item.url] = { price: price, t: Date.now() };
+            }
+            
+            // call callback immediately after result is ready
+            if (callback) callback(result);
+            
+            // delay between fetches except after last
+            if (qIdx < uncachedQueue.length - 1 && delayMs > 0) {
+                await new Promise(r => setTimeout(r, delayMs));
+            }
+        }
+
+        saveCache(cache);
+        // also expose in-memory
+        window._bullion_last_prices = results.reduce((m, p) => { m[p.name] = p; return m; }, {});
+        return results;
+    }
+
     // expose API
     global.BullionFetcher = {
         fetchPrice,
         fetchMultiple,
+        fetchMultipleWithCallback,
         parsePriceFromHtml,
         loadCache,
         saveCache,
