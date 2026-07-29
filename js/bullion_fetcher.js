@@ -19,7 +19,8 @@
     ];
 
     const defaultDelayMs = 2000;
-    const defaultBullionSources = [
+    // Fallback list used only if js/bullion_sources.json fails to load.
+    const fallbackBullionSources = [
         { name: '925 silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Sterling-Silver-Grain,-100--------Recycled-Silver-prcode-ASA-000' },
         { name: 'fine silver', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Silver-Grain,-100-Recycled---Silver-prcode-ASF-000' },
         { name: '9K gold', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/9ct-Casting-Yellow-Grain,-100-----Recycled-Gold-prcode-AAB-000' },
@@ -30,6 +31,13 @@
         { name: 'palladium', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Palladium-Casting-Pieces-prcode-APAL-000' },
         { name: 'platinum', url: 'https://www.cooksongold.com/Grain-and-Casting-Pieces/Platinum-Hc-Casting-Pieces-prcode-BXB-000' }
     ];
+    let defaultBullionSources = fallbackBullionSources;
+    const sourcesReady = fetch('js/bullion_sources.json')
+        .then(r => r.ok ? r.json() : fallbackBullionSources)
+        .then(list => { defaultBullionSources = list; return list; })
+        .catch(() => fallbackBullionSources);
+
+    const prefetchedUrl = 'data/bullion_prices.json';
     const storageKey = 'bullion_prices_v1';
 
     // simple logger
@@ -107,8 +115,9 @@
         return { url, price: null, error: 'No valid price found from any proxy' };
     }
 
-    async function fetchMultiple(items = defaultBullionSources, delayMs = defaultDelayMs) {
+    async function fetchMultiple(items, delayMs = defaultDelayMs) {
         // items: [{name, url}] or array of urls
+        if (items === undefined) { await sourcesReady; items = defaultBullionSources; }
         const results = [];
         const cache = loadCache();
 
@@ -137,9 +146,10 @@
         return results;
     }
 
-    async function fetchMultipleWithCallback(items = defaultBullionSources, delayMs = defaultDelayMs, callback = null) {
+    async function fetchMultipleWithCallback(items, delayMs = defaultDelayMs, callback = null) {
         // items: [{name, url}] or array of urls
         // callback: function(result) called for each price as it's found
+        if (items === undefined) { await sourcesReady; items = defaultBullionSources; }
         const results = new Array(items.length); // pre-allocate with correct size to maintain order
         const cache = loadCache();
         const uncachedQueue = []; // queue of {index, item}
@@ -188,11 +198,64 @@
         return results;
     }
 
+    async function loadPrefetched() {
+        try {
+            const resp = await fetch(prefetchedUrl, { cache: 'no-store' });
+            if (!resp.ok) return null;
+            const data = await resp.json();
+            return (data && data.prices) ? data.prices : null;
+        } catch (e) {
+            log('failed to load prefetched prices', e.message);
+            return null;
+        }
+    }
+
+    // Uses the daily-scraped data/bullion_prices.json first; only live-fetches
+    // (via fetchMultipleWithCallback, proxies + localStorage cache) whatever
+    // is missing or marked Unavailable in that file. Falls back to fetching
+    // everything live if the prefetched file itself can't be loaded.
+    async function fetchAllWithPrefetch(items, delayMs = defaultDelayMs, callback = null) {
+        if (items === undefined) { await sourcesReady; items = defaultBullionSources; }
+
+        const prefetched = await loadPrefetched();
+        if (!prefetched) {
+            return fetchMultipleWithCallback(items, delayMs, callback);
+        }
+
+        const results = new Array(items.length);
+        const remaining = []; // {index, item}
+
+        for (let i = 0; i < items.length; i++) {
+            const item = typeof items[i] === 'string' ? { url: items[i], name: items[i] } : items[i];
+            const found = prefetched[item.name];
+            if (found && found.price && found.price !== 'Unavailable') {
+                const result = { name: item.name, url: item.url, price: found.price, prefetched: true };
+                results[i] = result;
+                if (callback) callback(result);
+            } else {
+                remaining.push({ index: i, item });
+            }
+        }
+
+        if (remaining.length === 0) {
+            window._bullion_last_prices = results.reduce((m, p) => { m[p.name] = p; return m; }, {});
+            return results;
+        }
+
+        const liveResults = await fetchMultipleWithCallback(remaining.map(r => r.item), delayMs, callback);
+        remaining.forEach((r, k) => { results[r.index] = liveResults[k]; });
+
+        window._bullion_last_prices = results.reduce((m, p) => { m[p.name] = p; return m; }, {});
+        return results;
+    }
+
     // expose API
     global.BullionFetcher = {
         fetchPrice,
         fetchMultiple,
         fetchMultipleWithCallback,
+        fetchAllWithPrefetch,
+        loadPrefetched,
         parsePriceFromHtml,
         loadCache,
         saveCache,

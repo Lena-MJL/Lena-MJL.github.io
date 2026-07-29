@@ -1,0 +1,11 @@
+{
+  "name": "lena-mjl-github-io",
+  "private": true,
+  "description": "Daily bullion price scraper for GitHub Pages calculators",
+  "scripts": {
+    "scrape-prices": "node scripts/scrape_prices.js"
+  },
+  "dependencies": {
+    "node-html-parser": "^6.1.13"
+  }
+}

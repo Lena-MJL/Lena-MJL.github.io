@@ -412,19 +412,19 @@
                                             <br>
                                             <span class="text-muted">
                                                 ${r.price === "Unavailable" ? "Unavailable" :
-                                r.price + (r.cached ? '*' : '') + " per gram"}</span>
+                                r.price + (r.cached ? '*' : (r.prefetched ? '†' : '')) + " per gram"}</span>
                                         </div>
                                     </div>
                                 </div>
                             `;
                         });
-                        out += '<div class="text-muted small" style="margin-left: 5%;">* means price was cached in the last 6 hours</div></div>';
+                        out += '<div class="text-muted small" style="margin-left: 5%;">* means price was cached in the last 6 hours &nbsp; † means price from today\'s scheduled update</div></div>';
                         pricesList.innerHTML = out;
                     }
                 };
                 
                 // Fetch prices with callback for incremental display
-                const results = await BullionFetcher.fetchMultipleWithCallback(undefined, 2000, onPriceFound);
+                const results = await BullionFetcher.fetchAllWithPrefetch(undefined, 2000, onPriceFound);
                 
                 // Remove loading message now that fetch is complete
                 const loadingMessage = document.getElementById('loading-message');
@@ -459,13 +459,13 @@
                                     <br>
                                     <span class="text-muted">
                                         ${r.price === "Unavailable" ? "Unavailable" :
-                            r.price + (r.cached ? '*' : '') + " per gram"}</span>
+                            r.price + (r.cached ? '*' : (r.prefetched ? '†' : '')) + " per gram"}</span>
                                 </div>
                             </div>
                         </div>
                     `;
                 });
-                out += '<div class="text-muted small" style="margin-left: 5%;">* means price was cached in the last 6 hours</div></div>';
+                out += '<div class="text-muted small" style="margin-left: 5%;">* means price was cached in the last 6 hours &nbsp; † means price from today\'s scheduled update</div></div>';
                 const pricesList = document.getElementById('prices-list');
                 if (pricesList) {
                     pricesList.innerHTML = out;

@@ -1,0 +1,59 @@
+{
+  "fetchedAt": "2026-07-29T02:59:01.402Z",
+  "prices": {
+    "925 silver": {
+      "name": "925 silver",
+      "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/Sterling-Silver-Grain,-100--------Recycled-Silver-prcode-ASA-000",
+      "price": "£1.88",
+      "fetchedAt": "2026-07-29T02:58:46.596Z"
+    },
+    "fine silver": {
+      "name": "fine silver",
+      "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Silver-Grain,-100-Recycled---Silver-prcode-ASF-000",
+      "price": "£2.03",
+      "fetchedAt": "2026-07-29T02:58:48.519Z"
+    },
+    "9K gold": {
+      "name": "9K gold",
+      "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/9ct-Casting-Yellow-Grain,-100-----Recycled-Gold-prcode-AAB-000",
+      "price": "£50.23",
+      "fetchedAt": "2026-07-29T02:58:50.516Z"
+    },
+    "14K gold": {
+      "name": "14K gold",
+      "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/14ct-Ay-Yellow-Grain,-100-Recycled-Gold-prcode-AGE-000",
+      "price": "£79.76",
+      "fetchedAt": "2026-07-29T02:58:52.561Z"
+    },
+    "18K gold": {
+      "name": "18K gold",
+      "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/18ct-Hcb-Yellow-Grain,-100--------Recycled-Gold-prcode-ALO-000",
+      "price": "£101.68",
+      "fetchedAt": "2026-07-29T02:58:54.510Z"
+    },
+    "22K gold": {
+      "name": "22K gold",
+      "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/22ct-Yellow-Ds-Grain,-100-Recycled-Gold-prcode-AQA-000",
+      "price": "£123.46",
+      "fetchedAt": "2026-07-29T02:58:55.977Z"
+    },
+    "24K gold": {
+      "name": "24K gold",
+      "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Gold-Grain-Minimum-99.96-Au,-100-Recycled-Gold-prcode-ARZ-000",
+      "price": "£132.32",
+      "fetchedAt": "2026-07-29T02:58:57.731Z"
+    },
+    "palladium": {
+      "name": "palladium",
+      "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/Palladium-Casting-Pieces-prcode-APAL-000",
+      "price": "£48.30",
+      "fetchedAt": "2026-07-29T02:58:59.672Z"
+    },
+    "platinum": {
+      "name": "platinum",
+      "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/Platinum-Hc-Casting-Pieces-prcode-BXB-000",
+      "price": "£61.10",
+      "fetchedAt": "2026-07-29T02:59:01.402Z"
+    }
+  }
+}
