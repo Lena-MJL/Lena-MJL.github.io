@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volume to metal weight Calculator</title>
+    <title>Metal Cost Comparison</title>
 
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -33,13 +33,13 @@
             margin: 10px 0 10px 0;
         }
 
-        .vw-table-container {
+        .cc-table-container {
             width: 100%;
             margin: 0;
             padding: 0;
         }
 
-        .vw-table {
+        .cc-table {
             width: 100%;
             table-layout: fixed;
             border-collapse: collapse;
@@ -47,8 +47,8 @@
             display: table;
         }
 
-        .vw-table th,
-        .vw-table td {
+        .cc-table th,
+        .cc-table td {
             padding: 6px 8px;
             text-align: center;
             border: 1px solid #dee2e6;
@@ -57,12 +57,12 @@
             width: 130px;
         }
 
-        .vw-table th {
+        .cc-table th {
             background-color: #f8f9fa;
         }
 
-        .vw-table th:first-child,
-        .vw-table td:first-child {
+        .cc-table th:first-child,
+        .cc-table td:first-child {
             background-color: #fff;
             position: sticky;
             left: 0;
@@ -72,32 +72,32 @@
             /* 1.5x the standard column width */
         }
 
-        .vw-table thead th {
+        .cc-table thead th {
             position: sticky;
             top: 0;
             z-index: 2;
         }
 
-        .vw-table thead th:first-child {
+        .cc-table thead th:first-child {
             z-index: 3;
         }
 
-        .material-input {
-            width: 100%;
-            font-size: 1rem;
-            padding: 4px 4px;
-            border: 1px solid #dee2e6;
-            border-radius: 3px;
+        .cc-table td.diagonal {
+            background-color: #f8f9fa;
+            color: #adb5bd;
+        }
+
+        .cc-table td.cheaper {
+            color: #1e7e34;
+        }
+
+        .cc-table td.pricier {
+            color: #c0392b;
         }
 
         input[type="number"],
         input[type="text"] {
             font-size: 16px !important;
-        }
-
-        .form-control {
-            font-size: 16px !important;
-            padding: 4px 4px !important;
         }
 
         @media (max-width: 768px) {
@@ -130,63 +130,50 @@
                 margin: 5px 0;
             }
 
-            .vw-table-container {
+            .cc-table-container {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 max-height: calc(100vh - 200px);
                 overflow-y: auto;
             }
 
-            .vw-table th,
-            .vw-table td {
+            .cc-table th,
+            .cc-table td {
                 padding: 4px 6px;
                 font-size: 0.75rem;
                 min-width: 80px;
                 width: 80px;
             }
 
-            .vw-table th:first-child,
-            .vw-table td:first-child {
+            .cc-table th:first-child,
+            .cc-table td:first-child {
                 width: 100px;
             }
 
-            .vw-table thead th {
+            .cc-table thead th {
                 position: sticky !important;
                 top: 0 !important;
                 z-index: 2 !important;
                 background-color: #f8f9fa !important;
             }
 
-            .vw-table thead th:first-child {
+            .cc-table thead th:first-child {
                 z-index: 3 !important;
-            }
-
-            input[type="number"],
-            input[type="text"],
-            .form-control {
-                font-size: 0.75rem !important;
-                padding: 2px 3px !important;
-                height: auto;
-            }
-
-            .material-input {
-                font-size: 0.75rem !important;
-                padding: 2px 3px !important;
             }
         }
 
         @media (max-width: 480px) {
 
-            .vw-table th,
-            .vw-table td {
+            .cc-table th,
+            .cc-table td {
                 padding: 3px 4px;
                 font-size: 0.65rem;
                 min-width: 60px;
                 width: 60px;
             }
 
-            .vw-table th:first-child,
-            .vw-table td:first-child {
+            .cc-table th:first-child,
+            .cc-table td:first-child {
                 width: 70px;
             }
 
@@ -205,155 +192,122 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="/" class="btn btn-link">&larr; Back to Home</a>
-            <h2 class="m-0">Volume to metal weight Calculator</h2>
-            <h4>Prices of bullion based on links provided at the bottom. Please wait until they are loaded and displayed
-                in the header of the table to see the price estimates or use straight away for pure weight calculations.
-            </h4>
+            <h2 class="m-0">Metal Cost Comparison</h2>
+            <h4>Row = metal a piece is currently made in. Column = metal to switch to. Each cell shows how much
+                more (or less) it would cost percentage wise and per gram of the original piece, accounting for both price and
+                specific gravity differences. Waiting on bullion prices to load before figures appear.</h4>
             <div style="width: 100px;"></div> <!-- Spacer for balance -->
         </div>
-        <div class="vw-table-container">
-            <table class="vw-table" id="vw-table">
+        <div class="cc-table-container">
+            <table class="cc-table" id="cc-table">
                 <thead>
                     <tr id="header-row">
-                        <th>Volume</th>
+                        <th>Source \ Target</th>
                         <!-- Material headers will be rendered here -->
                     </tr>
                 </thead>
-                <tbody id="calculator-grid">
+                <tbody id="comparison-grid">
                     <!-- Rows will be rendered here -->
                 </tbody>
             </table>
         </div>
     </div>
     <script>
-        const volumeUnits = ["mm³", "cm³"]
-        // Define the materials list
+        // Bullion-priced metals only - names must match js/bullion_sources.json
         const materials = [
-            "925 silver", "fine silver",
-            "9K gold", "14K gold", "18K gold", "22K gold", "24K gold",
-            "palladium",
-            "platinum",
-            "brass",
-            "bronze",
-            "titanium",
+            "palladium", "platinum",
+            "925 silver", "940 argentium silver", "fine silver",
+            "9K gold", "9K white gold", "9K red gold",
+            "10K gold", "10K white gold", "10K red gold",
+            "14K gold", "14K white gold", "14K red gold",
+            "18K gold", "18K white gold", "18K red gold",
+            "22K gold", "24K gold",
         ];
-        let densityCubiccm = {};
 
-        const unitConversion = {
-            "mm³": 0.001,
-            "cm³": 1
-        }
+        let specificGravity = {};
 
-        // Get the header row and calculator grid elements
         const headerRow = document.getElementById('header-row');
-        const calculatorGrid = document.getElementById('calculator-grid');
+        const comparisonGrid = document.getElementById('comparison-grid');
 
         async function loadDensities() {
             try {
                 const resp = await fetch('js/specific_gravity.json');
-                densityCubiccm = resp.ok ? await resp.json() : {};
-            } catch (e) { densityCubiccm = {}; }
+                specificGravity = resp.ok ? await resp.json() : {};
+            } catch (e) { specificGravity = {}; }
             buildTable();
+            updateAllResults();
         }
 
         function buildTable() {
-        // First, create the header cells for material names
-        for (let j = 0; j < materials.length; j++) {
-            const th = document.createElement('th');
-            th.textContent = materials[j];
-            headerRow.appendChild(th);
-        }
-
-        // Then, create rows for each volume unit
-        for (let i = 0; i < volumeUnits.length; i++) {
-            // Create a table row
-            const tr = document.createElement('tr');
-            tr.id = `material-row-${i}`;
-
-            // Create the first cell with material name and input
-            const firstCell = document.createElement('td');
-
-            // Create label and input in a container
-            const inputContainer = document.createElement('div');
-
-            const label = document.createElement('label');
-            label.textContent = volumeUnits[i];
-            label.setAttribute('for', `input${i}`);
-
-            const input = document.createElement('input');
-            input.type = 'number';
-            input.className = 'form-control material-input';
-            input.id = `input${i}`;
-            input.placeholder = `Enter value`;
-            input.step = '0.01';
-
-            // Add label and input to container
-            inputContainer.appendChild(label);
-            inputContainer.appendChild(input);
-
-            // Add input container to first cell
-            firstCell.appendChild(inputContainer);
-
-            // Add first cell to row
-            tr.appendChild(firstCell);
-
-            // Create cells for each material result
             for (let j = 0; j < materials.length; j++) {
-                const td = document.createElement('td');
-                td.textContent = "-";  // Start with "-" instead of material name
-                td.id = `result-${i}-${j}`;
-                tr.appendChild(td);
+                const th = document.createElement('th');
+                th.textContent = materials[j];
+                headerRow.appendChild(th);
             }
 
-            // Add row to calculator grid
-            calculatorGrid.appendChild(tr);
+            for (let i = 0; i < materials.length; i++) {
+                const tr = document.createElement('tr');
+                tr.id = `material-row-${i}`;
 
-            // Add event listener to input to update results
-            input.addEventListener('input', function () {
-                updateResults(i, this.value);
-            });
-        }
-        }
+                const firstCell = document.createElement('td');
+                firstCell.textContent = materials[i];
+                tr.appendChild(firstCell);
 
-        // Function to update results based on input value
-        function updateResults(volumeIndex, value) {
-            if (!value) {
-                // Display "-" in all cells when input is empty
                 for (let j = 0; j < materials.length; j++) {
-                    document.getElementById(`result-${volumeIndex}-${j}`).textContent = "-";
-                }
-                return;
-            }
-
-            const inputValue = parseFloat(value);
-            const volumeConversion = unitConversion[volumeUnits[volumeIndex]]
-
-            // Update each result item with the calculated value
-            for (let j = 0; j < materials.length; j++) {
-                const targetMaterial = materials[j];
-                const density = densityCubiccm[targetMaterial] * volumeConversion;
-
-                // Calculate the equivalent weight based on relative specific gravity
-                const equivalentWeight = (inputValue * density).toFixed(2);
-
-                const resultElement = document.getElementById(`result-${volumeIndex}-${j}`);
-                resultElement.innerHTML = `${equivalentWeight}g`;
-
-                if (window.bullionPrices === undefined) {
-                    continue; // bullion prices not loaded yet
-                } else {
-                    const found = window.bullionPrices[materials[j]];
-                    if (found && found.price) {
-                        // append price on new line
-                        const price = found.price.substring(1); // remove currency symbol
-                        resultElement.innerHTML += `<br><small>£${(price * equivalentWeight).toFixed(2)}</small>`;
+                    const td = document.createElement('td');
+                    td.id = `result-${i}-${j}`;
+                    if (i === j) {
+                        td.textContent = '—';
+                        td.className = 'diagonal';
+                    } else {
+                        td.textContent = '-';
                     }
+                    tr.appendChild(td);
                 }
+
+                comparisonGrid.appendChild(tr);
             }
         }
 
-        loadDensities();
+        // Updates a single row (source material) using current prices/SG
+        function updateRow(i) {
+            const sourceMaterial = materials[i];
+            const sourceSg = specificGravity[sourceMaterial];
+            const sourcePriceInfo = window.bullionPrices && window.bullionPrices[sourceMaterial];
+            const sourcePrice = sourcePriceInfo && sourcePriceInfo.price && sourcePriceInfo.price !== 'Unavailable'
+                ? parseFloat(sourcePriceInfo.price.substring(1)) : null;
+
+            for (let j = 0; j < materials.length; j++) {
+                if (i === j) continue;
+                const resultElement = document.getElementById(`result-${i}-${j}`);
+                const targetMaterial = materials[j];
+                const targetSg = specificGravity[targetMaterial];
+                const targetPriceInfo = window.bullionPrices && window.bullionPrices[targetMaterial];
+                const targetPrice = targetPriceInfo && targetPriceInfo.price && targetPriceInfo.price !== 'Unavailable'
+                    ? parseFloat(targetPriceInfo.price.substring(1)) : null;
+
+                if (sourcePrice === null || targetPrice === null || !sourceSg || !targetSg) {
+                    resultElement.textContent = '-';
+                    resultElement.className = '';
+                    continue;
+                }
+
+                // cost per gram of the ORIGINAL piece if recast in target metal
+                const equivalentPricePerGram = targetPrice * (targetSg / sourceSg);
+                const diff = equivalentPricePerGram - sourcePrice;
+                const pct = (diff / sourcePrice) * 100;
+
+                const sign = diff > 0 ? '+' : (diff < 0 ? '-' : '');
+                resultElement.innerHTML = `${sign}${Math.abs(pct).toFixed(1)}%<br><small>${sign}£${Math.abs(diff).toFixed(2)}/g</small>`;
+                resultElement.className = diff > 0 ? 'pricier' : (diff < 0 ? 'cheaper' : '');
+            }
+        }
+
+        function updateAllResults() {
+            for (let i = 0; i < materials.length; i++) updateRow(i);
+        }
     </script>
+
     <!-- Embedded bullion prices (reuse shared fetcher) -->
     <div class="container mt-4" style="margin-top: 20px;">
         <h3>Bullion prices from cooksongold.com</h3>
@@ -365,38 +319,27 @@
         async function embedBullion() {
             const container = document.getElementById('bullion-embedded');
             container.innerHTML = '<div id="loading-message" class="alert alert-info">Loading bullion prices…</div><div id="prices-list"></div>';
-            
-            // Initialize bullionPrices early so calculations can use it
+
             if (!window.bullionPrices) {
                 window.bullionPrices = {};
             }
-            
+
             try {
-                // Define a callback to update UI as each price is found
                 const onPriceFound = (result) => {
-                    // Add to bullionPrices map
                     window.bullionPrices[result.name] = result;
-                    
-                    // Update the table header for this material
-                    const headerRow = document.getElementById('header-row');
-                    if (headerRow) {
-                        Array.from(headerRow.children).forEach(th => {
+
+                    const hr = document.getElementById('header-row');
+                    if (hr) {
+                        Array.from(hr.children).forEach(th => {
                             const name = th.textContent.trim();
                             if (name === result.name && result.price !== 'Unavailable') {
                                 th.innerHTML = `${result.name}<div class="small text-muted">${result.price}/g</div>`;
                             }
                         });
                     }
-                    
-                    // Update all calculated results that include this material
-                    for (let i = 0; i < volumeUnits.length; i++) {
-                        const input = document.getElementById(`input${i}`);
-                        if (input) {
-                            updateResults(i, input.value);
-                        }
-                    }
-                    
-                    // Re-render the list with current prices in the prices-list container
+
+                    updateAllResults();
+
                     const prices = Object.values(window.bullionPrices);
                     const pricesList = document.getElementById('prices-list');
                     if (pricesList && prices.length > 0) {
@@ -421,23 +364,19 @@
                         pricesList.innerHTML = out;
                     }
                 };
-                
-                // Fetch prices with callback for incremental display
+
                 const results = await BullionFetcher.fetchAllWithPrefetch(undefined, 2000, onPriceFound);
-                
-                // Remove loading message now that fetch is complete
+
                 const loadingMessage = document.getElementById('loading-message');
                 if (loadingMessage) {
                     loadingMessage.remove();
                 }
-                
-                // Expose prices map for other scripts
+
                 window.bullionPrices = results.reduce((m, v) => { m[v.name] = v; return m; }, {});
-                
-                // Update table headers in this page where material names match (final pass)
-                const headerRow = document.getElementById('header-row');
-                if (headerRow) {
-                    Array.from(headerRow.children).forEach(th => {
+
+                const hr = document.getElementById('header-row');
+                if (hr) {
+                    Array.from(hr.children).forEach(th => {
                         const name = th.textContent.trim();
                         const found = window.bullionPrices[name];
                         if (found && found.price && found.price !== 'Unavailable') {
@@ -445,8 +384,9 @@
                         }
                     });
                 }
-                
-                // Final render of the list
+
+                updateAllResults();
+
                 let out = '<div class="row">';
                 results.forEach(r => {
                     out += `
@@ -476,7 +416,10 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', embedBullion);
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadDensities();
+            embedBullion();
+        });
     </script>
 </body>
 

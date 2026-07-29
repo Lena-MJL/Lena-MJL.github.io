@@ -237,26 +237,21 @@
             "brass",
             "bronze",
         ];
-        const relative_sg_wax = {
-            "Wax": 1.0,
-            "925 silver": 10.30,
-            "fine silver": 10.53,
-            "9K gold": 11.2,
-            "14K gold": 14.1,
-            "18K gold": 15.7,
-            "22K gold": 17.8,
-            "24K gold": 19.5,
-            "platinum": 20.6,
-            "palladium": 12.02,
-            "brass": 8.5,
-            "bronze": 8.8,
-            "titanium": 4.51,
-        };
+        let relative_sg_wax = {};
 
         // Get the header row and calculator grid elements
         const headerRow = document.getElementById('header-row');
         const calculatorGrid = document.getElementById('calculator-grid');
 
+        async function loadDensities() {
+            try {
+                const resp = await fetch('js/specific_gravity.json');
+                relative_sg_wax = resp.ok ? await resp.json() : {};
+            } catch (e) { relative_sg_wax = {}; }
+            buildTable();
+        }
+
+        function buildTable() {
         // First, create the header cells for material names
         for (let j = 0; j < materials.length; j++) {
             const th = document.createElement('th');
@@ -313,6 +308,7 @@
                 updateResults(i, this.value);
             });
         }
+        }
 
         // Function to update results based on input value
         function updateResults(materialIndex, value) {
@@ -351,6 +347,8 @@
                 }
             }
         }
+
+        loadDensities();
     </script>
 
     <!-- Embedded bullion prices (reuse shared fetcher) -->
