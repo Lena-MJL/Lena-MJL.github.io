@@ -195,7 +195,8 @@
             <h2 class="m-0">Metal Cost Comparison</h2>
             <h4>Row = metal a piece is currently made in. Column = metal to switch to. Each cell shows how much
                 more (or less) it would cost percentage wise and per gram of the original piece, accounting for both price and
-                specific gravity differences. Waiting on bullion prices to load before figures appear.</h4>
+                specific gravity differences. Metals are sorted ascending by price per volume unit (not per gram).
+                Waiting on bullion prices to load before figures appear.</h4>
             <div style="width: 100px;"></div> <!-- Spacer for balance -->
         </div>
         <div class="cc-table-container">
@@ -234,6 +235,35 @@
                 const resp = await fetch('js/specific_gravity.json');
                 specificGravity = resp.ok ? await resp.json() : {};
             } catch (e) { specificGravity = {}; }
+            buildTable();
+            updateAllResults();
+        }
+
+        // Sorts `materials` ascending by price per volume unit (price/g * specific gravity).
+        // Materials without both a price and a density are left at the end, in their original order.
+        function sortMaterialsByPricePerVolume() {
+            const pricePerVolume = (name) => {
+                const sg = specificGravity[name];
+                const priceInfo = window.bullionPrices && window.bullionPrices[name];
+                const price = priceInfo && priceInfo.price && priceInfo.price !== 'Unavailable'
+                    ? parseFloat(priceInfo.price.substring(1)) : null;
+                return (sg && price !== null) ? price * sg : null;
+            };
+
+            materials.sort((a, b) => {
+                const va = pricePerVolume(a);
+                const vb = pricePerVolume(b);
+                if (va === null && vb === null) return 0;
+                if (va === null) return 1;
+                if (vb === null) return -1;
+                return va - vb;
+            });
+        }
+
+        function rebuildTable() {
+            sortMaterialsByPricePerVolume();
+            headerRow.innerHTML = '<th>Source \\ Target</th>';
+            comparisonGrid.innerHTML = '';
             buildTable();
             updateAllResults();
         }
@@ -375,6 +405,8 @@
 
                 window.bullionPrices = results.reduce((m, v) => { m[v.name] = v; return m; }, {});
 
+                rebuildTable();
+
                 const hr = document.getElementById('header-row');
                 if (hr) {
                     Array.from(hr.children).forEach(th => {
@@ -385,8 +417,6 @@
                         }
                     });
                 }
-
-                updateAllResults();
 
                 let out = '<div class="row">';
                 results.forEach(r => {
