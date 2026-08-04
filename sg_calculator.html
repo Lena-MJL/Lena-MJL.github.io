@@ -408,13 +408,14 @@
                                             <br>
                                             <span class="text-muted">
                                                 ${r.price === "Unavailable" ? "Unavailable" :
-                                r.price + (r.cached ? '*' : (r.prefetched ? '†' : '')) + " per gram"}</span>
+                                r.price + (r.prefetched ? '*' : (r.cached ? '**' : '')) + " per gram"}</span>
                                         </div>
                                     </div>
                                 </div>
                             `;
                         });
-                        out += '<div class="text-muted small" style="margin-left: 5%;">* means price was cached in the last 6 hours &nbsp; † means price from today\'s scheduled update</div></div>';
+                        const latestFetchedAt = prices.reduce((max, r) => r.fetchedAt && (!max || r.fetchedAt > max) ? r.fetchedAt : max, null);
+                        out += `<div class="text-muted small" style="margin-left: 5%;">* means price fetched at ${BullionFetcher.formatFetchedAt(latestFetchedAt)} &nbsp; ** means price was cached in the last 6 hours</div></div>`;
                         pricesList.innerHTML = out;
                     }
                 };
@@ -455,13 +456,16 @@
                                     <br>
                                     <span class="text-muted">
                                         ${r.price === "Unavailable" ? "Unavailable" :
-                            r.price + (r.cached ? '*' : (r.prefetched ? '†' : '')) + " per gram"}</span>
+                            r.price + (r.prefetched ? '*' : (r.cached ? '**' : '')) + " per gram"}</span>
                                 </div>
                             </div>
                         </div>
                     `;
                 });
-                out += '<div class="text-muted small" style="margin-left: 5%;">* means price was cached in the last 6 hours &nbsp; † means price from today\'s scheduled update</div></div>';
+                {
+                    const latestFetchedAt = results.reduce((max, r) => r.fetchedAt && (!max || r.fetchedAt > max) ? r.fetchedAt : max, null);
+                    out += `<div class="text-muted small" style="margin-left: 5%;">* means price fetched at ${BullionFetcher.formatFetchedAt(latestFetchedAt)} &nbsp; ** means price was cached in the last 6 hours</div></div>`;
+                }
                 const pricesList = document.getElementById('prices-list');
                 if (pricesList) {
                     pricesList.innerHTML = out;

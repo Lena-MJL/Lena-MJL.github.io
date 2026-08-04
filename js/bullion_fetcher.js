@@ -53,6 +53,16 @@
     // simple logger
     function log(...args) { console.log('[BullionFetcher]', ...args); }
 
+    function formatFetchedAt(iso) {
+        if (!iso) return '';
+        const d = new Date(iso);
+        if (isNaN(d)) return '';
+        return d.toLocaleString(undefined, {
+            day: 'numeric', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+    }
+
     function parsePriceFromHtml(html) {
         if (!html) return null;
         try {
@@ -136,14 +146,15 @@
             // use cached if recent
             const cached = cache[item.url];
             if (cached && Date.now() - cached.t < (1000 * 60 * 60 * 6)) { // 6 hour cache
-                results.push({ name: item.name, url: item.url, price: cached.price, cached: true });
+                results.push({ name: item.name, url: item.url, price: cached.price, cached: true, fetchedAt: new Date(cached.t).toISOString() });
             } else {
                 const res = await fetchPrice(item.url);
                 const price = res.price || 'Unavailable';
-                results.push({ name: item.name, url: item.url, price, cached: false });
+                const now = Date.now();
+                results.push({ name: item.name, url: item.url, price, cached: false, fetchedAt: new Date(now).toISOString() });
                 if (res.price) {
                     // store in cache
-                    cache[item.url] = { price: price, t: Date.now() };
+                    cache[item.url] = { price: price, t: now };
                 }
                 // delay between fetches except after last
                 if (i < items.length - 1 && delayMs > 0) await new Promise(r => setTimeout(r, delayMs));
@@ -170,7 +181,7 @@
             const cached = cache[item.url];
             
             if (cached && Date.now() - cached.t < (1000 * 60 * 60 * 6)) { // 6 hour cache
-                const result = { name: item.name, url: item.url, price: cached.price, cached: true };
+                const result = { name: item.name, url: item.url, price: cached.price, cached: true, fetchedAt: new Date(cached.t).toISOString() };
                 results[i] = result;
                 // call callback immediately for cached
                 if (callback) callback(result);
@@ -183,14 +194,15 @@
         // Second pass: process uncached items sequentially with delays
         for (let qIdx = 0; qIdx < uncachedQueue.length; qIdx++) {
             const { index, item } = uncachedQueue[qIdx];
-            
+
             // Fetch this item
             const res = await fetchPrice(item.url);
             const price = res.price || 'Unavailable';
-            const result = { name: item.name, url: item.url, price, cached: false };
+            const now = Date.now();
+            const result = { name: item.name, url: item.url, price, cached: false, fetchedAt: new Date(now).toISOString() };
             results[index] = result;
             if (res.price) {
-                cache[item.url] = { price: price, t: Date.now() };
+                cache[item.url] = { price: price, t: now };
             }
             
             // call callback immediately after result is ready
@@ -239,7 +251,7 @@
             const item = typeof items[i] === 'string' ? { url: items[i], name: items[i] } : items[i];
             const found = prefetched[item.name];
             if (found && found.price && found.price !== 'Unavailable') {
-                const result = { name: item.name, url: item.url, price: found.price, prefetched: true };
+                const result = { name: item.name, url: item.url, price: found.price, prefetched: true, fetchedAt: found.fetchedAt };
                 results[i] = result;
                 if (callback) callback(result);
             } else {
@@ -269,6 +281,7 @@
         parsePriceFromHtml,
         loadCache,
         saveCache,
+        formatFetchedAt,
         corsProxies,
         _lastCacheKey: storageKey
     };
