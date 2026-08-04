@@ -12,180 +12,7 @@
 
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            width: 100vw;
-            overflow: visible;
-        }
-
-        .container {
-            max-width: 100% !important;
-            width: 98%;
-            padding: 0;
-            margin: 0 1%;
-        }
-
-        h2 {
-            margin: 10px 0 10px 0;
-        }
-
-        .cc-table-container {
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        .cc-table {
-            width: 100%;
-            table-layout: fixed;
-            border-collapse: collapse;
-            margin: 0;
-            display: table;
-        }
-
-        .cc-table th,
-        .cc-table td {
-            padding: 6px 8px;
-            text-align: center;
-            border: 1px solid #dee2e6;
-            white-space: nowrap;
-            min-width: 130px;
-            width: 130px;
-        }
-
-        .cc-table th {
-            background-color: #f8f9fa;
-        }
-
-        .cc-table th:first-child,
-        .cc-table td:first-child {
-            background-color: #fff;
-            position: sticky;
-            left: 0;
-            z-index: 1;
-            text-align: left;
-            width: 195px;
-            /* 1.5x the standard column width */
-        }
-
-        .cc-table thead th {
-            position: sticky;
-            top: 0;
-            z-index: 2;
-        }
-
-        .cc-table thead th:first-child {
-            z-index: 3;
-        }
-
-        .cc-table td.diagonal {
-            background-color: #f8f9fa;
-            color: #adb5bd;
-        }
-
-        .cc-table td.cheaper {
-            color: #1e7e34;
-        }
-
-        .cc-table td.pricier {
-            color: #c0392b;
-        }
-
-        input[type="number"],
-        input[type="text"] {
-            font-size: 16px !important;
-        }
-
-        @media (max-width: 768px) {
-
-            body,
-            html {
-                height: auto;
-                width: 100%;
-            }
-
-            .container {
-                width: 100%;
-                margin: 0;
-                padding: 8px;
-            }
-
-            .d-flex {
-                flex-direction: column !important;
-                gap: 10px;
-                align-items: flex-start !important;
-            }
-
-            h2 {
-                font-size: 1.25rem;
-                margin: 5px 0;
-            }
-
-            h4 {
-                font-size: 0.85rem;
-                margin: 5px 0;
-            }
-
-            .cc-table-container {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                max-height: calc(100vh - 200px);
-                overflow-y: auto;
-            }
-
-            .cc-table th,
-            .cc-table td {
-                padding: 4px 6px;
-                font-size: 0.75rem;
-                min-width: 80px;
-                width: 80px;
-            }
-
-            .cc-table th:first-child,
-            .cc-table td:first-child {
-                width: 100px;
-            }
-
-            .cc-table thead th {
-                position: sticky !important;
-                top: 0 !important;
-                z-index: 2 !important;
-                background-color: #f8f9fa !important;
-            }
-
-            .cc-table thead th:first-child {
-                z-index: 3 !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-
-            .cc-table th,
-            .cc-table td {
-                padding: 3px 4px;
-                font-size: 0.65rem;
-                min-width: 60px;
-                width: 60px;
-            }
-
-            .cc-table th:first-child,
-            .cc-table td:first-child {
-                width: 70px;
-            }
-
-            h2 {
-                font-size: 1rem;
-            }
-
-            h4 {
-                font-size: 0.7rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/calculator-table.css">
 </head>
 
 <body>
@@ -199,8 +26,8 @@
                 Waiting on bullion prices to load before figures appear.</h4>
             <div style="width: 100px;"></div> <!-- Spacer for balance -->
         </div>
-        <div class="cc-table-container">
-            <table class="cc-table" id="cc-table">
+        <div class="calc-table-container">
+            <table class="calc-table" id="calc-table">
                 <thead>
                     <tr id="header-row">
                         <th>Source \ Target</th>
@@ -345,115 +172,23 @@
     </div>
 
     <script src="js/bullion_fetcher.js"></script>
+    <script src="js/bullion_embed.js"></script>
     <script>
-        async function embedBullion() {
-            const container = document.getElementById('bullion-embedded');
-            container.innerHTML = '<div id="loading-message" class="alert alert-info">Loading bullion prices…</div><div id="prices-list"></div>';
-
-            if (!window.bullionPrices) {
-                window.bullionPrices = {};
-            }
-
-            try {
-                const onPriceFound = (result) => {
-                    window.bullionPrices[result.name] = result;
-
-                    const hr = document.getElementById('header-row');
-                    if (hr) {
-                        Array.from(hr.children).forEach(th => {
-                            const name = th.textContent.trim();
-                            if (name === result.name && result.price !== 'Unavailable') {
-                                th.innerHTML = `${result.name}<div class="small text-muted">${result.price}/g</div>`;
-                            }
-                        });
-                    }
-
-                    updateAllResults();
-
-                    const prices = Object.values(window.bullionPrices);
-                    const pricesList = document.getElementById('prices-list');
-                    if (pricesList && prices.length > 0) {
-                        let out = '<div class="row">';
-                        prices.forEach(r => {
-                            out += `
-                                <div class="col-md-3 mb-2">
-                                    <div class="card">
-                                        <div class="card-body p-2">
-                                            <strong>${r.name}</strong>
-                                            <span class="text-muted"><a href="${r.url}" target="_blank">Product link</a></span>
-                                            <br>
-                                            <span class="text-muted">
-                                                ${r.price === "Unavailable" ? "Unavailable" :
-                                r.price + (r.prefetched ? '*' : (r.cached ? '**' : '')) + " per gram"}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        const latestFetchedAt = prices.reduce((max, r) => r.fetchedAt && (!max || r.fetchedAt > max) ? r.fetchedAt : max, null);
-                        out += `<div class="text-muted small" style="margin-left: 5%;">* means price fetched at ${BullionFetcher.formatFetchedAt(latestFetchedAt)} &nbsp; ** means price was cached in the last 6 hours</div></div>`;
-                        pricesList.innerHTML = out;
-                    }
-                };
-
-                const results = await BullionFetcher.fetchAllWithPrefetch(undefined, 2000, onPriceFound);
-
-                const loadingMessage = document.getElementById('loading-message');
-                if (loadingMessage) {
-                    loadingMessage.remove();
-                }
-
-                window.bullionPrices = results.reduce((m, v) => { m[v.name] = v; return m; }, {});
-
-                rebuildTable();
-
-                const hr = document.getElementById('header-row');
-                if (hr) {
-                    Array.from(hr.children).forEach(th => {
-                        const name = th.textContent.trim();
-                        const found = window.bullionPrices[name];
-                        if (found && found.price && found.price !== 'Unavailable') {
-                            th.innerHTML = `${name}<div class="small text-muted">${found.price}/g</div>`;
-                        }
-                    });
-                }
-
-                let out = '<div class="row">';
-                results.forEach(r => {
-                    out += `
-                        <div class="col-md-3 mb-2">
-                            <div class="card">
-                                <div class="card-body p-2">
-                                    <strong>${r.name}</strong>
-                                    <span class="text-muted"><a href="${r.url}" target="_blank">Product link</a></span>
-                                    <br>
-                                    <span class="text-muted">
-                                        ${r.price === "Unavailable" ? "Unavailable" :
-                            r.price + (r.prefetched ? '*' : (r.cached ? '**' : '')) + " per gram"}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                {
-                    const latestFetchedAt = results.reduce((max, r) => r.fetchedAt && (!max || r.fetchedAt > max) ? r.fetchedAt : max, null);
-                    out += `<div class="text-muted small" style="margin-left: 5%;">* means price fetched at ${BullionFetcher.formatFetchedAt(latestFetchedAt)} &nbsp; ** means price was cached in the last 6 hours</div></div>`;
-                }
-                const pricesList = document.getElementById('prices-list');
-                if (pricesList) {
-                    pricesList.innerHTML = out;
-                }
-
-            } catch (e) {
-                console.error(e);
-                container.innerHTML = '<div class="alert alert-danger">Unable to load bullion prices.</div>';
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', async () => {
             await loadDensities();
-            embedBullion();
+            embedBullion(rebuildTable);
         });
+    </script>
+
+    <!-- Embedded specific gravity data -->
+    <div class="container mt-4" style="margin-top: 20px;">
+        <h3>Specific gravity</h3>
+        <div id="sg-embedded"></div>
+    </div>
+
+    <script src="js/sg_embed.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', embedSpecificGravity);
     </script>
 </body>
 

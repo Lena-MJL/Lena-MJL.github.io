@@ -12,193 +12,7 @@
 
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            width: 100vw;
-            overflow: visible;
-        }
-
-        .container {
-            max-width: 100% !important;
-            width: 98%;
-            padding: 0;
-            margin: 0 1%;
-        }
-
-        h2 {
-            margin: 10px 0 10px 0;
-        }
-
-        .sg-table-container {
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        .sg-table {
-            width: 100%;
-            table-layout: fixed;
-            border-collapse: collapse;
-            margin: 0;
-            display: table;
-        }
-
-        .sg-table th,
-        .sg-table td {
-            padding: 6px 8px;
-            text-align: center;
-            border: 1px solid #dee2e6;
-            white-space: nowrap;
-            min-width: 130px;
-            width: 130px;
-        }
-
-        .sg-table th {
-            background-color: #f8f9fa;
-        }
-
-        .sg-table th:first-child,
-        .sg-table td:first-child {
-            background-color: #fff;
-            text-align: left;
-            width: 195px;
-            /* 1.5x the standard column width */
-            position: sticky;
-            left: 0;
-            z-index: 1;
-        }
-
-        .sg-table thead th {
-            position: sticky;
-            top: 0;
-            z-index: 2;
-        }
-
-        .sg-table thead th:first-child {
-            z-index: 3;
-        }
-
-        .material-input {
-            width: 100%;
-            font-size: 1rem;
-            padding: 4px 4px;
-            border: 1px solid #dee2e6;
-            border-radius: 3px;
-        }
-
-        input[type="number"],
-        input[type="text"] {
-            font-size: 16px !important;
-        }
-
-        .form-control {
-            font-size: 16px !important;
-            padding: 4px 4px !important;
-        }
-
-        @media (max-width: 768px) {
-
-            body,
-            html {
-                height: auto;
-                width: 100%;
-            }
-
-            .container {
-                width: 100%;
-                margin: 0;
-                padding: 8px;
-            }
-
-            .d-flex {
-                flex-direction: column !important;
-                gap: 10px;
-                align-items: flex-start !important;
-            }
-
-            h2 {
-                font-size: 1.25rem;
-                margin: 5px 0;
-            }
-
-            h4 {
-                font-size: 0.85rem;
-                margin: 5px 0;
-            }
-
-            .sg-table-container {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                max-height: calc(100vh - 200px);
-                overflow-y: auto;
-            }
-
-            .sg-table th,
-            .sg-table td {
-                padding: 4px 6px;
-                font-size: 0.75rem;
-                min-width: 80px;
-                width: 80px;
-            }
-
-            .sg-table th:first-child,
-            .sg-table td:first-child {
-                width: 100px;
-            }
-
-            .sg-table thead th {
-                position: sticky !important;
-                top: 0 !important;
-                z-index: 2 !important;
-                background-color: #f8f9fa !important;
-            }
-
-            .sg-table thead th:first-child {
-                z-index: 3 !important;
-            }
-
-            input[type="number"],
-            input[type="text"],
-            .form-control {
-                font-size: 0.75rem !important;
-                padding: 2px 3px !important;
-                height: auto;
-            }
-
-            .material-input {
-                font-size: 0.75rem !important;
-                padding: 2px 3px !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-
-            .sg-table th,
-            .sg-table td {
-                padding: 3px 4px;
-                font-size: 0.65rem;
-                min-width: 60px;
-                width: 60px;
-            }
-
-            .sg-table th:first-child,
-            .sg-table td:first-child {
-                width: 70px;
-            }
-
-            h2 {
-                font-size: 1rem;
-            }
-
-            h4 {
-                font-size: 0.7rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/calculator-table.css">
 </head>
 
 <body>
@@ -211,8 +25,8 @@
             </h4>
             <div style="width: 100px;"></div> <!-- Spacer for balance -->
         </div>
-        <div class="sg-table-container">
-            <table class="sg-table" id="sg-table">
+        <div class="calc-table-container">
+            <table class="calc-table" id="calc-table">
                 <thead>
                     <tr id="header-row">
                         <th>Source material</th>
@@ -358,126 +172,27 @@
     </div>
 
     <script src="js/bullion_fetcher.js"></script>
+    <script src="js/bullion_embed.js"></script>
     <script>
-        async function embedBullion() {
-            const container = document.getElementById('bullion-embedded');
-            container.innerHTML = '<div id="loading-message" class="alert alert-info">Loading bullion prices…</div><div id="prices-list"></div>';
-            
-            // Initialize bullionPrices early so calculations can use it
-            if (!window.bullionPrices) {
-                window.bullionPrices = {};
-            }
-            
-            try {
-                // Define a callback to update UI as each price is found
-                const onPriceFound = (result) => {
-                    // Add to bullionPrices map
-                    window.bullionPrices[result.name] = result;
-                    
-                    // Update the table header for this material
-                    const headerRow = document.getElementById('header-row');
-                    if (headerRow) {
-                        Array.from(headerRow.children).forEach(th => {
-                            const name = th.textContent.trim();
-                            if (name === result.name && result.price !== 'Unavailable') {
-                                th.innerHTML = `${result.name}<div class="small text-muted">${result.price}/g</div>`;
-                            }
-                        });
-                    }
-                    
-                    // Update all calculated results that include this material
-                    for (let i = 0; i < materials.length; i++) {
-                        const input = document.getElementById(`input${i}`);
-                        if (input) {
-                            updateResults(i, input.value);
-                        }
-                    }
-                    
-                    // Re-render the list with current prices in the prices-list container
-                    const prices = Object.values(window.bullionPrices);
-                    const pricesList = document.getElementById('prices-list');
-                    if (pricesList && prices.length > 0) {
-                        let out = '<div class="row">';
-                        prices.forEach(r => {
-                            out += `
-                                <div class="col-md-3 mb-2">
-                                    <div class="card">
-                                        <div class="card-body p-2">
-                                            <strong>${r.name}</strong>
-                                            <span class="text-muted"><a href="${r.url}" target="_blank">Product link</a></span>
-                                            <br>
-                                            <span class="text-muted">
-                                                ${r.price === "Unavailable" ? "Unavailable" :
-                                r.price + (r.prefetched ? '*' : (r.cached ? '**' : '')) + " per gram"}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        const latestFetchedAt = prices.reduce((max, r) => r.fetchedAt && (!max || r.fetchedAt > max) ? r.fetchedAt : max, null);
-                        out += `<div class="text-muted small" style="margin-left: 5%;">* means price fetched at ${BullionFetcher.formatFetchedAt(latestFetchedAt)} &nbsp; ** means price was cached in the last 6 hours</div></div>`;
-                        pricesList.innerHTML = out;
-                    }
-                };
-                
-                // Fetch prices with callback for incremental display
-                const results = await BullionFetcher.fetchAllWithPrefetch(undefined, 2000, onPriceFound);
-                
-                // Remove loading message now that fetch is complete
-                const loadingMessage = document.getElementById('loading-message');
-                if (loadingMessage) {
-                    loadingMessage.remove();
-                }
-                
-                // Expose prices map for other scripts
-                window.bullionPrices = results.reduce((m, v) => { m[v.name] = v; return m; }, {});
-                
-                // Update table headers in this page where material names match (final pass)
-                const headerRow = document.getElementById('header-row');
-                if (headerRow) {
-                    Array.from(headerRow.children).forEach(th => {
-                        const name = th.textContent.trim();
-                        const found = window.bullionPrices[name];
-                        if (found && found.price && found.price !== 'Unavailable') {
-                            th.innerHTML = `${name}<div class="small text-muted">${found.price}/g</div>`;
-                        }
-                    });
-                }
-                
-                // Final render of the list
-                let out = '<div class="row">';
-                results.forEach(r => {
-                    out += `
-                        <div class="col-md-3 mb-2">
-                            <div class="card">
-                                <div class="card-body p-2">
-                                    <strong>${r.name}</strong>
-                                    <span class="text-muted"><a href="${r.url}" target="_blank">Product link</a></span>
-                                    <br>
-                                    <span class="text-muted">
-                                        ${r.price === "Unavailable" ? "Unavailable" :
-                            r.price + (r.prefetched ? '*' : (r.cached ? '**' : '')) + " per gram"}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                {
-                    const latestFetchedAt = results.reduce((max, r) => r.fetchedAt && (!max || r.fetchedAt > max) ? r.fetchedAt : max, null);
-                    out += `<div class="text-muted small" style="margin-left: 5%;">* means price fetched at ${BullionFetcher.formatFetchedAt(latestFetchedAt)} &nbsp; ** means price was cached in the last 6 hours</div></div>`;
-                }
-                const pricesList = document.getElementById('prices-list');
-                if (pricesList) {
-                    pricesList.innerHTML = out;
-                }
-
-            } catch (e) {
-                console.error(e);
-                container.innerHTML = '<div class="alert alert-danger">Unable to load bullion prices.</div>';
+        function updateAllResults() {
+            for (let i = 0; i < materials.length; i++) {
+                const input = document.getElementById(`input${i}`);
+                if (input) updateResults(i, input.value);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', embedBullion);
+        document.addEventListener('DOMContentLoaded', () => embedBullion(updateAllResults));
+    </script>
+
+    <!-- Embedded specific gravity data -->
+    <div class="container mt-4" style="margin-top: 20px;">
+        <h3>Specific gravity</h3>
+        <div id="sg-embedded"></div>
+    </div>
+
+    <script src="js/sg_embed.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', embedSpecificGravity);
     </script>
 </body>
 
