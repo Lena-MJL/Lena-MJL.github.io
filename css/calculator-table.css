@@ -16,7 +16,13 @@ html {
 
 h2 {
     margin: 10px 0 10px 0;
+    font-size: 2rem;
 }
+
+h4 {
+    font-size: 1.1rem;
+}
+
 
 .calc-table-container {
     width: 100%;
@@ -119,12 +125,12 @@ input[type="text"] {
     }
 
     h2 {
-        font-size: 1.25rem;
+        font-size: 1.75rem;
         margin: 5px 0;
     }
 
     h4 {
-        font-size: 0.85rem;
+        font-size: 1rem;
         margin: 5px 0;
     }
 
@@ -137,15 +143,16 @@ input[type="text"] {
 
     .calc-table th,
     .calc-table td {
-        padding: 4px 6px;
-        font-size: 0.75rem;
-        min-width: 80px;
-        width: 80px;
+        padding: 8px 10px;
+        font-size: 0.95rem;
+        min-width: 110px;
+        width: 110px;
     }
 
     .calc-table th:first-child,
     .calc-table td:first-child {
-        width: 100px;
+        width: 140px;
+        min-width: 140px;
     }
 
     .calc-table thead th {
@@ -162,14 +169,14 @@ input[type="text"] {
     input[type="number"],
     input[type="text"],
     .form-control {
-        font-size: 0.75rem !important;
-        padding: 2px 3px !important;
+        font-size: 1rem !important;
+        padding: 4px 6px !important;
         height: auto;
     }
 
     .material-input {
-        font-size: 0.75rem !important;
-        padding: 2px 3px !important;
+        font-size: 1rem !important;
+        padding: 4px 6px !important;
     }
 }
 
@@ -177,22 +184,24 @@ input[type="text"] {
 
     .calc-table th,
     .calc-table td {
-        padding: 3px 4px;
-        font-size: 0.65rem;
-        min-width: 60px;
-        width: 60px;
+        padding: 7px 9px;
+        font-size: 0.9rem;
+        min-width: 100px;
+        width: 100px;
     }
 
     .calc-table th:first-child,
     .calc-table td:first-child {
-        width: 70px;
+        width: 120px;
+        min-width: 120px;
     }
 
     h2 {
-        font-size: 1rem;
+        font-size: 1.6rem;
     }
 
     h4 {
-        font-size: 0.7rem;
+        font-size: 0.9rem;
     }
+
 }
