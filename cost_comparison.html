@@ -155,7 +155,8 @@
                 const pct = (diff / sourcePrice) * 100;
 
                 const sign = diff > 0 ? '+' : (diff < 0 ? '-' : '');
-                resultElement.innerHTML = `${sign}${Math.abs(pct).toFixed(1)}%<br><small>${sign}£${Math.abs(diff).toFixed(2)}/g</small>`;
+                const multiplier = equivalentPricePerGram / sourcePrice;
+                resultElement.innerHTML = `${sign}${Math.abs(pct).toFixed(1)}%<br><small>${multiplier.toFixed(2)}x (${sign}£${Math.abs(diff).toFixed(2)}/g)</small>`;
                 resultElement.className = diff > 0 ? 'pricier' : (diff < 0 ? 'cheaper' : '');
             }
         }
