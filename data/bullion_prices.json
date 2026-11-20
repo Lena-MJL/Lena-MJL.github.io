@@ -1,119 +1,119 @@
 {
-  "fetchedAt": "2026-11-19T11:03:58.401Z",
+  "fetchedAt": "2026-11-20T10:52:17.487Z",
   "prices": {
     "925 silver": {
       "name": "925 silver",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/Sterling-Silver-Grain,-100--------Recycled-Silver-prcode-ASA-000",
-      "price": "£1.55",
-      "fetchedAt": "2026-11-19T11:03:18.041Z"
+      "price": "£1.49",
+      "fetchedAt": "2026-11-20T10:51:35.628Z"
     },
     "fine silver": {
       "name": "fine silver",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Silver-Grain,-100-Recycled---Silver-prcode-ASF-000",
-      "price": "£1.66",
-      "fetchedAt": "2026-11-19T11:03:20.636Z"
+      "price": "£1.60",
+      "fetchedAt": "2026-11-20T10:51:38.468Z"
     },
     "9K gold": {
       "name": "9K gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/9ct-Casting-Yellow-Grain,-100-----Recycled-Gold-prcode-AAB-000",
       "price": "£47.92",
-      "fetchedAt": "2026-11-19T11:03:23.376Z"
+      "fetchedAt": "2026-11-20T10:51:41.258Z"
     },
     "14K gold": {
       "name": "14K gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/14ct-Ay-Yellow-Grain,-100-Recycled-Gold-prcode-AGE-000",
-      "price": "£76.21",
-      "fetchedAt": "2026-11-19T11:03:26.125Z"
+      "price": "£74.57",
+      "fetchedAt": "2026-11-20T10:51:43.960Z"
     },
     "18K gold": {
       "name": "18K gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/18ct-Hcb-Yellow-Grain,-100--------Recycled-Gold-prcode-ALO-000",
-      "price": "£97.08",
-      "fetchedAt": "2026-11-19T11:03:28.865Z"
+      "price": "£97.07",
+      "fetchedAt": "2026-11-20T10:51:46.697Z"
     },
     "22K gold": {
       "name": "22K gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/22ct-Yellow-Ds-Grain,-100-Recycled-Gold-prcode-AQA-000",
-      "price": "£117.90",
-      "fetchedAt": "2026-11-19T11:03:31.486Z"
+      "price": "£115.33",
+      "fetchedAt": "2026-11-20T10:51:49.499Z"
     },
     "24K gold": {
       "name": "24K gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/Fine-Gold-Grain-Minimum-99.96-Au,-100-Recycled-Gold-prcode-ARZ-000",
-      "price": "£126.28",
-      "fetchedAt": "2026-11-19T11:03:33.393Z"
+      "price": "£123.48",
+      "fetchedAt": "2026-11-20T10:51:51.786Z"
     },
     "palladium": {
       "name": "palladium",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/Palladium-Casting-Pieces-prcode-APAL-000",
-      "price": "£33.86",
-      "fetchedAt": "2026-11-19T11:03:36.042Z"
+      "price": "£33.70",
+      "fetchedAt": "2026-11-20T10:51:54.509Z"
     },
     "platinum": {
       "name": "platinum",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/Platinum-Hc-Casting-Pieces-prcode-BXB-000",
-      "price": "£55.28",
-      "fetchedAt": "2026-11-19T11:03:37.987Z"
+      "price": "£54.36",
+      "fetchedAt": "2026-11-20T10:51:56.776Z"
     },
     "940 argentium silver": {
       "name": "940 argentium silver",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/Argentium-940-Silver-Casting-Pieces-prcode-BS40-000",
-      "price": "£1.93",
-      "fetchedAt": "2026-11-19T11:03:40.102Z"
+      "price": "£1.86",
+      "fetchedAt": "2026-11-20T10:51:59.031Z"
     },
     "9K white gold": {
       "name": "9K white gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/9ct-White-Gold-Casting-Grain,-100-Recycled-Gold-prcode-AAG-000",
-      "price": "£49.34",
-      "fetchedAt": "2026-11-19T11:03:41.988Z"
+      "price": "£48.26",
+      "fetchedAt": "2026-11-20T10:52:01.119Z"
     },
     "9K red gold": {
       "name": "9K red gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/9ct-Red-Gold-Casting-Grain,-100-Recycled-Gold-prcode-AAQ-000",
-      "price": "£48.55",
-      "fetchedAt": "2026-11-19T11:03:44.335Z"
+      "price": "£47.50",
+      "fetchedAt": "2026-11-20T10:52:03.212Z"
     },
     "10K gold": {
       "name": "10K gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/10ct-Yellow-Gold-Casting-Grain,-100-Recycled-Gold-prcode-AFA-000",
-      "price": "£54.00",
-      "fetchedAt": "2026-11-19T11:03:46.376Z"
+      "price": "£52.81",
+      "fetchedAt": "2026-11-20T10:52:05.095Z"
     },
     "10K white gold": {
       "name": "10K white gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/10ct-White-Gold-Casting-Grain,-100-Recycled-Gold-prcode-ABE-000",
-      "price": "£54.82",
-      "fetchedAt": "2026-11-19T11:03:48.295Z"
+      "price": "£53.60",
+      "fetchedAt": "2026-11-20T10:52:07.168Z"
     },
     "10K red gold": {
       "name": "10K red gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/10ct-Ar-Red-Grain,-100-Recycled-Gold-prcode-ABF-000",
-      "price": "£53.81",
-      "fetchedAt": "2026-11-19T11:03:50.241Z"
+      "price": "£52.64",
+      "fetchedAt": "2026-11-20T10:52:09.113Z"
     },
     "14K white gold": {
       "name": "14K white gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/14ct-White-Gold-and-Palladium-Casting-Grain,-100-Recycled-Gold-prcode-AGR-000",
-      "price": "£78.11",
-      "fetchedAt": "2026-11-19T11:03:52.542Z"
+      "price": "£76.43",
+      "fetchedAt": "2026-11-20T10:52:11.121Z"
     },
     "14K red gold": {
       "name": "14K red gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/14ct-Red-Gold-Casting-Grain-prcode-AGM-000",
-      "price": "£76.14",
-      "fetchedAt": "2026-11-19T11:03:54.445Z"
+      "price": "£74.50",
+      "fetchedAt": "2026-11-20T10:52:13.049Z"
     },
     "18K white gold": {
       "name": "18K white gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/18ct-White-Gold-Casting-Grain-100-Recycled-Gold-prcode-ALQ-000",
-      "price": "£97.25",
-      "fetchedAt": "2026-11-19T11:03:56.498Z"
+      "price": "£95.14",
+      "fetchedAt": "2026-11-20T10:52:15.113Z"
     },
     "18K red gold": {
       "name": "18K red gold",
       "url": "https://www.cooksongold.com/Grain-and-Casting-Pieces/18ct-Red-Grain,-100-Recycled-Gold-prcode-ALI-000",
-      "price": "£97.12",
-      "fetchedAt": "2026-11-19T11:03:58.401Z"
+      "price": "£95.00",
+      "fetchedAt": "2026-11-20T10:52:17.487Z"
     }
   }
 }
